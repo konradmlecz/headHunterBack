@@ -1,15 +1,5 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-enum UserRole {
-  ADMIN = 'admin',
-  HR = 'hr',
-  STUDENT = 'student',
-}
-
-enum StudentStatus {
-  AVAILABLE = 'available',
-  INCONVERSATION = 'in_conversation',
-}
+import { StudentStatus, UserRole } from '../types/user';
 
 @Entity()
 export class User extends BaseEntity {

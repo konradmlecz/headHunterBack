@@ -8,3 +8,7 @@ export enum StudentStatus {
   AVAILABLE = 'available',
   INCONVERSATION = 'in_conversation',
 }
+
+export type registerUserResponse = {
+  isSuccess: true;
+};
