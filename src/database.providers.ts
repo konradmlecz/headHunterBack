@@ -11,6 +11,7 @@ export const databaseProviders = [
         username: config.dbUsername,
         password: config.dbPassword,
         database: config.dbDatabase,
+        port: config.dbPort,
         entities: ['dist//**/**.entity{.ts,.js}'],
         bigNumberStrings: false,
         logging: true,
