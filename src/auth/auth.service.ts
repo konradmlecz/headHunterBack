@@ -49,7 +49,7 @@ export class AuthService {
       });
 
       if (user && (await bcrypt.compare(req.pwd, user.pwd))) {
-        const token = await this.createToken(await this.generateToken(user));
+        const token = this.createToken(await this.generateToken(user));
 
         return res
           .cookie('jwt', token.accessToken, {
