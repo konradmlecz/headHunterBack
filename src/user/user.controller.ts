@@ -10,6 +10,7 @@ import { UserRoleGuard } from 'src/guards/user-role.guard';
 export class UserController {
   constructor(@Inject(UserService) private userService: UserService) {}
 
+  // Temporary endpoint with authentication and authorization
   @Post('/register')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.ADMIN)
