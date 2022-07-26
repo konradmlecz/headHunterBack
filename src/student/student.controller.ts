@@ -14,6 +14,7 @@ import { StudentService } from './student.service';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from 'src/user/user.entity';
 import { Student } from '../types/student';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('student')
 export class StudentController {
@@ -24,5 +25,15 @@ export class StudentController {
   @Role(UserRole.STUDENT)
   getStudentProfile(@UserObj() student: User): Student {
     return this.studentService.getProfile(student);
+  }
+
+  @Patch('/profile')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.STUDENT)
+  updateStudentProfile(
+    @UserObj() student: User,
+    @Body() profile: UpdateStudentDto,
+  ): Promise<any> {
+    return this.studentService.update(student, profile);
   }
 }
