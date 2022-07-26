@@ -57,7 +57,10 @@ export class AuthService {
             domain: 'localhost',
             httpOnly: true,
           })
-          .json({ loggedIn: true });
+          .json({
+            isSuccess: true,
+            role: user.role,
+          });
       }
 
       return res.json({ error: 'Invalid login data!' });
@@ -75,7 +78,7 @@ export class AuthService {
         domain: 'localhost',
         httpOnly: true,
       });
-      return res.json({ loggedOut: true });
+      return res.json({ isSuccess: true });
     } catch (e) {
       return res.json({ error: e.message });
     }
