@@ -14,7 +14,7 @@ export enum expectedContractType {
 }
 
 export interface Student {
-  id: string;
+  id?: string;
   email: string;
   phone: number;
   firstName: string;
@@ -33,3 +33,7 @@ export interface Student {
   workExperience: string;
   courses: string;
 }
+
+export type updateUserResponse = {
+  isSuccess: boolean;
+};
