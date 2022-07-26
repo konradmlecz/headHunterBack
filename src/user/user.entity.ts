@@ -1,3 +1,4 @@
+import { expectedContractType, expectedTypeWork } from 'src/types/student';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { StudentStatus, UserRole } from '../types/user';
 
@@ -109,7 +110,7 @@ export class User extends BaseEntity {
     nullable: true,
     default: null,
   })
-  expectedTypeWork: string | null;
+  expectedTypeWork: expectedTypeWork | null;
 
   @Column({
     nullable: true,
@@ -121,7 +122,7 @@ export class User extends BaseEntity {
     nullable: true,
     default: null,
   })
-  expectedContractType: string | null;
+  expectedContractType: expectedContractType | null;
 
   @Column({
     nullable: true,
