@@ -13,7 +13,7 @@ import { UserRole } from '../types/user';
 import { StudentService } from './student.service';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from 'src/user/user.entity';
-import { Student } from '../types/student';
+import { Student, updateUserResponse } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('student')
@@ -33,7 +33,7 @@ export class StudentController {
   updateStudentProfile(
     @UserObj() student: User,
     @Body() profile: UpdateStudentDto,
-  ): Promise<any> {
+  ): Promise<updateUserResponse> {
     return this.studentService.update(student, profile);
   }
 }
