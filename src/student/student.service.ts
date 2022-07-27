@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
-import { Student, updateUserResponse } from '../types/student';
+import { Student, updateStudentResponse } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { UserRole } from '../types/user';
 
@@ -53,7 +53,7 @@ export class StudentService {
   async update(
     student: User,
     profile: UpdateStudentDto,
-  ): Promise<updateUserResponse> {
+  ): Promise<updateStudentResponse> {
     const foundStudent = await User.findOne({ where: { id: student.id } });
 
     foundStudent.email = profile.email;
@@ -88,6 +88,7 @@ export class StudentService {
         isActive: true,
       },
     });
+
     return students;
   }
 }
