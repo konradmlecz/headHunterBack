@@ -10,9 +10,10 @@ import { AuthService } from "../auth/auth.service";
 import { UserRole } from "../types/user";
 import { RegisterAdminDto } from "../user/dto/register-admin.dto";
 import { registerStudent } from "../user/dto/student-register.dto";
+import { validate } from "class-validator";
 
 @Injectable()
-export class AdminService extends AuthService{
+export class AdminService extends AuthService {
 
   constructor(
     @Inject(MailService) private mailService: MailService) {
@@ -20,31 +21,55 @@ export class AdminService extends AuthService{
   }
 
   async import(files: MulterDiskUploadedFiles) {
+    let error;
     const student = await files?.studentData?.[0] ?? null;
+    const studentsData: registerStudent[] = JSON.parse(await fs.readFile(path.join(storageDir(), "student", `${student.filename}`), "utf-8"));
     try {
-      if (student.filename) {
-        const studentsData = JSON.parse(await fs.readFile(path.join(storageDir(), "student", `${student.filename}`), "utf-8"));
+      studentsData.map((student: registerStudent) => {
+        if (
+          !student.email.includes("@")
+          ||
+          student.courseCompletion > 5 || student.courseCompletion < 0
+          ||
+          student.courseEngagment > 5 || student.courseEngagment < 0
+          ||
+          student.projectDegree > 5 || student.projectDegree < 0
+          ||
+          student.teamProjectDegree > 5 || student.teamProjectDegree < 0
+          ||
+          typeof student.bonusProjectUrls !== "string"
+        ) {
+          error = true;
+          return;
+        } else {
+          studentsData.map(async (student: registerStudent) => {
+            const user = new User();
+            user.email = student.email;
+            user.courseCompletion = student.courseCompletion;
+            user.courseEngagment = student.courseEngagment;
+            user.projectDegree = student.projectDegree;
+            user.teamProjectDegree = student.teamProjectDegree;
+            user.bonusProjectUrls = student.bonusProjectUrls;
+            user.isActive = false;
+            user.role = UserRole.STUDENT;
 
-        studentsData.map(async (student : registerStudent) => {
+            await this.generateToken(user);
+            await user.save();
+            // await this.mailService.sendMail(user.email, `Head Hunter |MEGAK| - dokończ rejestracje!`, registerEmailTemplate(user.id, user.currentTokenId));
+          });
+        }
+      });
 
-          const user = new User();
-          user.email = student.email;
-          user.courseCompletion = student.courseCompletion;
-          user.courseEngagment = student.courseEngagment;
-          user.projectDegree = student.projectDegree;
-          user.teamProjectDegree = student.projectDegree;
-          user.bonusProjectUrls = student.bonusProjectUrls;
-          user.isActive = false;
-          user.role = UserRole.STUDENT
-
-          await this.generateToken(user);
-          await user.save();
-          await this.mailService.sendMail(user.email, `Head Hunter |MEGAK| - dokończ rejestracje!`, registerEmailTemplate(user.id,user.currentTokenId));
-
-        });
-      }
       await fs.unlink(path.join(storageDir(), "student", student.filename));
-      return { isSuccess: true };
+
+      if (error === true) {
+        return {
+          isSuccess: false,
+          message: "Bad JSON data, check your file"
+        };
+      } else {
+        return { isSuccess: true };
+      }
     } catch (err) {
       throw(err);
       try {
@@ -58,6 +83,5 @@ export class AdminService extends AuthService{
       }
       throw(err);
     }
-
   }
 }
