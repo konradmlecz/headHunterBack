@@ -5,6 +5,7 @@ import { DatabaseModule } from './database.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { StudentModule } from './student/student.module';
+
 import { MailModule } from './mail/mail.module';
 import { AdminModule } from './admin/admin.module';
 
@@ -17,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
     MailModule,
     AdminModule,
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })
