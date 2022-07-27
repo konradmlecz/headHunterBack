@@ -36,4 +36,11 @@ export class StudentController {
   ): Promise<updateUserResponse> {
     return this.studentService.update(student, profile);
   }
+
+  @Get('/all')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  getAllStudents() {
+    return this.studentService.getAll();
+  }
 }

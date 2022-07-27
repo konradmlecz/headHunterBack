@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import { Student, updateUserResponse } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { UserRole } from '../types/user';
 
 @Injectable()
 export class StudentService {
@@ -78,5 +79,15 @@ export class StudentService {
     return {
       isSuccess: true,
     };
+  }
+
+  async getAll() {
+    const students = await User.find({
+      where: {
+        role: UserRole.STUDENT,
+        isActive: true,
+      },
+    });
+    return students;
   }
 }
