@@ -9,4 +9,6 @@
 //   emailUser: '',
 //   emailPass: '',
 //   emailFrom: '',
+
+// corsOrigin: 'http://localhost:3000',
 // };
