@@ -10,7 +10,7 @@ import { config } from '../config/config';
 
 @Injectable()
 export class AuthService {
-  private createToken(currentTokenId: string): {
+  protected createToken(currentTokenId: string): {
     accessToken: string;
     expiresIn: number;
   } {
@@ -25,7 +25,7 @@ export class AuthService {
     };
   }
 
-  private async generateToken(user: User): Promise<string> {
+  protected async generateToken(user: User): Promise<string> {
     let token;
     let userWithThisToken = null;
     do {

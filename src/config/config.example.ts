@@ -6,4 +6,7 @@
 //   dbDatabase: '',
 
 //   jwtSecret:
+//   emailUser: '',
+//   emailPass: '',
+//   emailFrom: '',
 // };
