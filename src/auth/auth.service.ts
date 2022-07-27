@@ -60,6 +60,8 @@ export class AuthService {
           .json({
             isSuccess: true,
             role: user.role,
+            firstName: user.firstName,
+            lastName: user.lastName,
           });
       }
 
