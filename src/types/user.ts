@@ -6,7 +6,8 @@ export enum UserRole {
 
 export enum StudentStatus {
   AVAILABLE = 'available',
-  INCONVERSATION = 'in_conversation',
+  INTERVIEW = 'interview',
+  EMPLOYED = 'employed',
 }
 
 export type registerUserResponse = {

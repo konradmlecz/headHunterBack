@@ -34,6 +34,13 @@ export interface Student {
   courses: string;
 }
 
-export type updateUserResponse = {
+export type updateStudentResponse = {
   isSuccess: boolean;
 };
+
+export interface GetAllStudentsResponse extends Student {
+  courseCompletion: number;
+  courseEngagment: number;
+  projectDegree: number;
+  teamProjectDegree: number;
+}
