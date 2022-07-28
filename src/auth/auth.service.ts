@@ -48,6 +48,10 @@ export class AuthService {
         },
       });
 
+      if (!user?.isActive) {
+        return res.json({ error: 'User is not active!' });
+      }
+
       if (user && (await bcrypt.compare(req.pwd, user.pwd))) {
         const token = this.createToken(await this.generateToken(user));
 
