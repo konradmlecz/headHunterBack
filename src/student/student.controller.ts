@@ -48,10 +48,4 @@ export class StudentController {
   getAllStudents(): Promise<GetAllStudentsResponse[]> {
     return this.studentService.getAll();
   }
-
-  @Post('/setpassword')
-  async userLogin(@Body() req: SetPassword): Promise<any> {
-    console.log(1);
-    return this.studentService.setPassword(req);
-  }
 }

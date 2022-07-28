@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Response } from 'express';
+import { response, Response } from 'express';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { User } from '../user/user.entity';
 import * as bcrypt from 'bcrypt';
@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { JwtPayload } from './jwt.strategy';
 import { config } from '../config/config';
+import { SetPassword } from '../student/dto/update-student.dto';
 
 @Injectable()
 export class AuthService {
@@ -84,5 +85,42 @@ export class AuthService {
     } catch (e) {
       return res.json({ error: e.message });
     }
+  }
+
+  async register(id: string, token: string, res: Response) {
+    const student = await User.findOne({
+      where: {
+        id,
+        currentTokenId: token,
+      },
+    });
+
+    if (!student) {
+      res.status(401).json({
+        message: 'Not active link',
+      });
+    } else {
+      res.redirect('https://wp.pl');
+    }
+  }
+
+  async setPassword({ id, pwd }: SetPassword) {
+    const foundStudent = await User.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPwd = await bcrypt.hash(pwd, salt);
+
+    foundStudent.currentTokenId = null;
+    foundStudent.pwd = hashedPwd;
+
+    await foundStudent.save();
+
+    return {
+      isSuccess: true,
+    };
   }
 }
