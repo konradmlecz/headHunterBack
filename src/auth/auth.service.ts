@@ -87,10 +87,13 @@ export class AuthService {
   }
 
   check(user: User) {
-    const { email, role } = user;
+    const { email, firstName, lastName, role } = user;
     return {
       email,
+      firstName,
+      lastName,
       role,
+      isSuccess: true,
     };
   }
 }
