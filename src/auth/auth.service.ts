@@ -85,4 +85,12 @@ export class AuthService {
       return res.json({ error: e.message });
     }
   }
+
+  check(user: User) {
+    const { email, role } = user;
+    return {
+      email,
+      role,
+    };
+  }
 }

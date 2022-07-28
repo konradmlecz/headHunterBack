@@ -18,6 +18,12 @@ export class AuthController {
     return this.authService.login(req, res);
   }
 
+  @Get('/check')
+  @UseGuards(AuthGuard('jwt'))
+  async checkLogin(@UserObj() user: User) {
+    return this.authService.check(user);
+  }
+
   @Get('logout')
   @UseGuards(AuthGuard('jwt'))
   async logout(@UserObj() user: User, @Res() res: Response) {
