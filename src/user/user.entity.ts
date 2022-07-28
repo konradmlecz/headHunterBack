@@ -55,12 +55,13 @@ export class User extends BaseEntity {
   // Fields for students
 
   @Column({
-    nullable: true,
-    default: null,
+    default: false,
   })
-  isActive: boolean | null;
+  isActive: boolean;
 
   @Column({
+    type: 'enum',
+    enum: StudentStatus,
     nullable: true,
     default: null,
   })
