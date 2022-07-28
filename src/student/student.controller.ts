@@ -4,6 +4,7 @@ import {
   Get,
   Inject,
   Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,7 +19,7 @@ import {
   Student,
   updateStudentResponse,
 } from '../types/student';
-import { UpdateStudentDto } from './dto/update-student.dto';
+import { SetPassword, UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('student')
 export class StudentController {
@@ -46,5 +47,11 @@ export class StudentController {
   @Role(UserRole.HR)
   getAllStudents(): Promise<GetAllStudentsResponse[]> {
     return this.studentService.getAll();
+  }
+
+  @Post('/setpassword')
+  async userLogin(@Body() req: SetPassword): Promise<any> {
+    console.log(1);
+    return this.studentService.setPassword(req);
   }
 }

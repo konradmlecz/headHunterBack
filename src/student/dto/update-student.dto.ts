@@ -19,3 +19,8 @@ export class UpdateStudentDto {
   workExperience: string;
   courses: string;
 }
+
+export interface SetPassword {
+  id: string;
+  pwd: string;
+}
