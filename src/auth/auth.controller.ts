@@ -33,19 +33,4 @@ export class AuthController {
   async logout(@UserObj() user: User, @Res() res: Response) {
     return this.authService.logout(user, res);
   }
-
-  @Get('/register/:id/:token')
-  async register(
-    @Param('id') id: string,
-    @Param('token') token: string,
-    @Res() res: Response,
-  ) {
-    await this.authService.register(id, token, res);
-  }
-
-  @Post('/setpassword')
-  async setPassword(@Body() req: SetPassword): Promise<any> {
-    console.log(1);
-    return this.authService.setPassword(req);
-  }
 }
