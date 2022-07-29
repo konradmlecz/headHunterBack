@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { User } from '../user/user.entity';
 import {
   GetAllStudentsResponse,
@@ -90,6 +90,7 @@ export class StudentService {
       where: {
         role: UserRole.STUDENT,
         isActive: true,
+        status: StudentStatus.AVAILABLE,
       },
     });
 
@@ -122,6 +123,13 @@ export class StudentService {
         id,
       },
     });
+
+    if (foundStudent.status !== StudentStatus.AVAILABLE) {
+      throw new HttpException(
+        'Student must have available status!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     foundStudent.status = StudentStatus.INTERVIEW;
     foundStudent.headHunter = hr;
