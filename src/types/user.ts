@@ -13,3 +13,7 @@ export enum StudentStatus {
 export type registerUserResponse = {
   isSuccess: true;
 };
+
+export interface BeforeSetPasswordResponse {
+  email: string;
+}

@@ -61,4 +61,16 @@ export class UserService {
       isSuccess: true,
     };
   }
+
+  async beforeSetPassword(id: string) {
+    const foundStudent = await User.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    return {
+      email: foundStudent.email,
+    };
+  }
 }

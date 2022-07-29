@@ -6,6 +6,4 @@ export class AuthLoginDto {
   email: string;
   @IsString()
   pwd: string;
-  @IsString()
-  role: UserRole;
 }

@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterAdminDto } from './dto/register-admin.dto';
-import { registerUserResponse, UserRole } from '../types/user';
+import {
+  BeforeSetPasswordResponse,
+  registerUserResponse,
+  UserRole,
+} from '../types/user';
 import { Role } from '../decorators/user-role.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRoleGuard } from 'src/guards/user-role.guard';
@@ -36,6 +40,13 @@ export class UserController {
     @Res() res: Response,
   ) {
     await this.userService.register(id, token, res);
+  }
+
+  @Get('/setpassword/:id')
+  async beforeSetPassword(
+    @Param() id: string,
+  ): Promise<BeforeSetPasswordResponse> {
+    return this.userService.beforeSetPassword(id);
   }
 
   @Post('/setpassword')
