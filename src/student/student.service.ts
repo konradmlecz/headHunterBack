@@ -5,9 +5,8 @@ import {
   Student,
   UpdateStudentResponse,
 } from '../types/student';
-import { SetPassword, UpdateStudentDto } from './dto/update-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentStatus, UserRole } from '../types/user';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class StudentService {
@@ -114,5 +113,20 @@ export class StudentService {
     return {
       isSuccess: true,
     };
+  }
+
+  async setToInterview(hr: User, id: string): Promise<any> {
+    const foundStudent = await User.findOne({
+      relations: ['headHunter'],
+      where: {
+        id,
+      },
+    });
+
+    foundStudent.status = StudentStatus.INTERVIEW;
+    foundStudent.headHunter = hr;
+    await foundStudent.save();
+
+    return { foundStudent };
   }
 }

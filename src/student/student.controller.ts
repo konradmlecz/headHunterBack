@@ -3,8 +3,8 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Patch,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -19,7 +19,7 @@ import {
   Student,
   UpdateStudentResponse,
 } from '../types/student';
-import { SetPassword, UpdateStudentDto } from './dto/update-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('student')
 export class StudentController {
@@ -54,5 +54,15 @@ export class StudentController {
   @Role(UserRole.STUDENT)
   async setEmployed(@UserObj() student: User): Promise<UpdateStudentResponse> {
     return this.studentService.setEmployed(student);
+  }
+
+  @Patch('/interview/:id')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  async setToInterview(
+    @UserObj() hr: User,
+    @Param('id') id: string,
+  ): Promise<any> {
+    return this.studentService.setToInterview(hr, id);
   }
 }
