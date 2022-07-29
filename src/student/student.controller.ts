@@ -49,12 +49,6 @@ export class StudentController {
     return this.studentService.getAll();
   }
 
-  @Post('/setpassword')
-  async userLogin(@Body() req: SetPassword): Promise<any> {
-    console.log(1);
-    return this.studentService.setPassword(req);
-  }
-
   @Patch('/employed')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.STUDENT)

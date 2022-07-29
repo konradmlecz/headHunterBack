@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Response } from 'express';
+import { response, Response } from 'express';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import { User } from '../user/user.entity';
 import * as bcrypt from 'bcrypt';
@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { JwtPayload } from './jwt.strategy';
 import { config } from '../config/config';
+import { SetPassword } from '../student/dto/update-student.dto';
 
 @Injectable()
 export class AuthService {

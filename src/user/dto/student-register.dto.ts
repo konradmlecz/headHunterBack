@@ -1,4 +1,5 @@
-import { UserRole } from "../../types/user";
+import { UserRole } from '../../types/user';
+import { IsEmail } from 'class-validator';
 
 export class registerStudent {
   email: string;

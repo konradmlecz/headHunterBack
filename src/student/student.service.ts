@@ -99,26 +99,6 @@ export class StudentService {
     );
   }
 
-  async setPassword({ id, pwd }: SetPassword) {
-    const foundStudent = await User.findOne({
-      where: {
-        id: id,
-      },
-    });
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPwd = await bcrypt.hash(pwd, salt);
-
-    foundStudent.currentTokenId = null;
-    foundStudent.pwd = hashedPwd;
-
-    await foundStudent.save();
-
-    return {
-      isSuccess: true,
-    };
-  }
-
   async setEmployed(student: User): Promise<UpdateStudentResponse> {
     const foundStudent = await User.findOne({
       where: {

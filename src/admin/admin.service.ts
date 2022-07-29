@@ -9,6 +9,7 @@ import { registerEmailTemplate } from '../templates/email/register';
 import { AuthService } from '../auth/auth.service';
 import { UserRole } from '../types/user';
 import { registerStudent } from '../user/dto/student-register.dto';
+import * as Joi from 'joi';
 
 @Injectable()
 export class AdminService extends AuthService {
@@ -17,7 +18,6 @@ export class AdminService extends AuthService {
   }
 
   async import(files: MulterDiskUploadedFiles) {
-    let error;
     const student = (await files?.studentData?.[0]) ?? null;
     const studentsData: registerStudent[] = JSON.parse(
       await fs.readFile(
@@ -26,30 +26,25 @@ export class AdminService extends AuthService {
       ),
     );
 
-    studentsData.map(async (student: registerStudent) => {
-      if (
-        !student.email.includes('@') ||
-        student.courseCompletion > 5 ||
-        student.courseCompletion < 0 ||
-        student.courseEngagment > 5 ||
-        student.courseEngagment < 0 ||
-        student.projectDegree > 5 ||
-        student.projectDegree < 0 ||
-        student.teamProjectDegree > 5 ||
-        student.teamProjectDegree < 0 ||
-        typeof student.bonusProjectUrls !== 'string'
-      ) {
-        error = true;
-        return;
-      }
-    });
+    const schema = Joi.array().items(
+      Joi.object().keys({
+        email: Joi.string().email(),
+        courseCompletion: Joi.number().min(0).max(5),
+        courseEngagement: Joi.number().min(0).max(5),
+        projectDegree: Joi.number().min(0).max(5),
+        teamProjectDegree: Joi.number().min(0).max(5),
+        bonusProjectUrls: Joi.string(),
+      }),
+    );
+
+    const result = await schema.validate(studentsData, { abortEarly: false });
 
     try {
-      if (error === true) {
+      if (result.error) {
         await fs.unlink(path.join(storageDir(), 'student', student.filename));
         return {
           isSuccess: false,
-          message: 'Bad JSON data, check your file',
+          errors: result.error.details,
         };
       } else {
         studentsData.map(async (student: registerStudent) => {
