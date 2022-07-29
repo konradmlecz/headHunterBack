@@ -1,5 +1,4 @@
 import { IsString } from 'class-validator';
-import { UserRole } from '../../types/user';
 
 export class AuthLoginDto {
   @IsString()

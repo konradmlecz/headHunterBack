@@ -3,10 +3,10 @@ import { User } from '../user/user.entity';
 import {
   GetAllStudentsResponse,
   Student,
-  updateStudentResponse,
+  UpdateStudentResponse,
 } from '../types/student';
 import { SetPassword, UpdateStudentDto } from './dto/update-student.dto';
-import { UserRole } from '../types/user';
+import { StudentStatus, UserRole } from '../types/user';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -58,7 +58,7 @@ export class StudentService {
   async update(
     student: User,
     profile: UpdateStudentDto,
-  ): Promise<updateStudentResponse> {
+  ): Promise<UpdateStudentResponse> {
     const foundStudent = await User.findOne({ where: { id: student.id } });
 
     foundStudent.email = profile.email;
@@ -97,5 +97,22 @@ export class StudentService {
     return students.map(
       ({ pwd, currentTokenId, isActive, status, role, ...other }) => other,
     );
+  }
+
+  async setEmployed(student: User): Promise<UpdateStudentResponse> {
+    const foundStudent = await User.findOne({
+      where: {
+        id: student.id,
+      },
+    });
+
+    foundStudent.status = StudentStatus.EMPLOYED;
+    foundStudent.isActive = false;
+    foundStudent.currentTokenId = null;
+    await foundStudent.save();
+
+    return {
+      isSuccess: true,
+    };
   }
 }

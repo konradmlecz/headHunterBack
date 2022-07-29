@@ -17,7 +17,7 @@ import { User } from 'src/user/user.entity';
 import {
   GetAllStudentsResponse,
   Student,
-  updateStudentResponse,
+  UpdateStudentResponse,
 } from '../types/student';
 import { SetPassword, UpdateStudentDto } from './dto/update-student.dto';
 
@@ -38,7 +38,7 @@ export class StudentController {
   updateStudentProfile(
     @UserObj() student: User,
     @Body() profile: UpdateStudentDto,
-  ): Promise<updateStudentResponse> {
+  ): Promise<UpdateStudentResponse> {
     return this.studentService.update(student, profile);
   }
 
@@ -47,5 +47,12 @@ export class StudentController {
   @Role(UserRole.HR)
   getAllStudents(): Promise<GetAllStudentsResponse[]> {
     return this.studentService.getAll();
+  }
+
+  @Patch('/employed')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.STUDENT)
+  async setEmployed(@UserObj() student: User): Promise<UpdateStudentResponse> {
+    return this.studentService.setEmployed(student);
   }
 }

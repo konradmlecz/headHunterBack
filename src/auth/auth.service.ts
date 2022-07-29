@@ -49,6 +49,10 @@ export class AuthService {
         },
       });
 
+      if (!user?.isActive) {
+        return res.json({ error: 'User is not active!' });
+      }
+
       if (user && (await bcrypt.compare(req.pwd, user.pwd))) {
         const token = this.createToken(await this.generateToken(user));
 
@@ -85,5 +89,16 @@ export class AuthService {
     } catch (e) {
       return res.json({ error: e.message });
     }
+  }
+
+  check(user: User) {
+    const { email, firstName, lastName, role } = user;
+    return {
+      email,
+      firstName,
+      lastName,
+      role,
+      isSuccess: true,
+    };
   }
 }

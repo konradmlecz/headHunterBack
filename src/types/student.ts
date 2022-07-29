@@ -34,7 +34,7 @@ export interface Student {
   courses: string;
 }
 
-export type updateStudentResponse = {
+export type UpdateStudentResponse = {
   isSuccess: boolean;
 };
 
