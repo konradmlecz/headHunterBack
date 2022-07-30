@@ -13,7 +13,10 @@ import { UserRole } from '../types/user';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from '../user/user.entity';
 import { HeadhunterService } from './headhunter.service';
-import { SetStudentInterviewResponse } from '../types/headhunter';
+import {
+  SetDisinterestResponse,
+  SetStudentInterviewResponse,
+} from '../types/headhunter';
 import { GetAllStudentsResponse } from '../types/student';
 
 @Controller('headhunter')
@@ -37,5 +40,14 @@ export class HeadhunterController {
     @Param('id') id: string,
   ): Promise<SetStudentInterviewResponse> {
     return this.headhunterService.setToInterview(hr, id);
+  }
+
+  @Patch('/disinterest/:id')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  async setDisinterest(
+    @Param('id') id: string,
+  ): Promise<SetDisinterestResponse> {
+    return this.headhunterService.setDisinterest(id);
   }
 }
