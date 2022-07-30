@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Inject,
-  Param,
   Patch,
   UseGuards,
 } from '@nestjs/common';
@@ -54,15 +53,5 @@ export class StudentController {
   @Role(UserRole.STUDENT)
   async setEmployed(@UserObj() student: User): Promise<UpdateStudentResponse> {
     return this.studentService.setEmployed(student);
-  }
-
-  @Patch('/interview/:id')
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @Role(UserRole.HR)
-  async setToInterview(
-    @UserObj() hr: User,
-    @Param('id') id: string,
-  ): Promise<any> {
-    return this.studentService.setToInterview(hr, id);
   }
 }

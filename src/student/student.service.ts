@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import {
   GetAllStudentsResponse,
@@ -114,27 +114,5 @@ export class StudentService {
     return {
       isSuccess: true,
     };
-  }
-
-  async setToInterview(hr: User, id: string): Promise<any> {
-    const foundStudent = await User.findOne({
-      relations: ['headHunter'],
-      where: {
-        id,
-      },
-    });
-
-    if (foundStudent.status !== StudentStatus.AVAILABLE) {
-      throw new HttpException(
-        'Student must have available status!',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    foundStudent.status = StudentStatus.INTERVIEW;
-    foundStudent.headHunter = hr;
-    await foundStudent.save();
-
-    return { foundStudent };
   }
 }

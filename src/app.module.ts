@@ -8,6 +8,7 @@ import { StudentModule } from './student/student.module';
 
 import { MailModule } from './mail/mail.module';
 import { AdminModule } from './admin/admin.module';
+import { HeadhunterModule } from './headhunter/headhunter.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AdminModule } from './admin/admin.module';
     UserModule,
     AuthModule,
     StudentModule,
+    HeadhunterModule,
     MailModule,
     AdminModule,
   ],
