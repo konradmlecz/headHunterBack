@@ -1,10 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
-import { StudentStatus } from '../types/user';
+import { StudentStatus, UserRole } from '../types/user';
 import { SetStudentInterviewResponse } from '../types/headhunter';
+import { GetAllStudentsResponse } from '../types/student';
 
 @Injectable()
 export class HeadhunterService {
+  async getAll(): Promise<GetAllStudentsResponse[]> {
+    const students = await User.find({
+      where: {
+        role: UserRole.STUDENT,
+        isActive: true,
+        status: StudentStatus.AVAILABLE,
+      },
+    });
+
+    return students.map(
+      ({ pwd, currentTokenId, isActive, status, role, ...other }) => other,
+    );
+  }
+
   async setToInterview(
     hr: User,
     id: string,

@@ -13,11 +13,7 @@ import { UserRole } from '../types/user';
 import { StudentService } from './student.service';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from 'src/user/user.entity';
-import {
-  GetAllStudentsResponse,
-  Student,
-  UpdateStudentResponse,
-} from '../types/student';
+import { Student, UpdateStudentResponse } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('student')
@@ -39,13 +35,6 @@ export class StudentController {
     @Body() profile: UpdateStudentDto,
   ): Promise<UpdateStudentResponse> {
     return this.studentService.update(student, profile);
-  }
-
-  @Get('/all')
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @Role(UserRole.HR)
-  getAllStudents(): Promise<GetAllStudentsResponse[]> {
-    return this.studentService.getAll();
   }
 
   @Patch('/employed')
