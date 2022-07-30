@@ -1,7 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import { StudentStatus, UserRole } from '../types/user';
-import { SetStudentInterviewResponse } from '../types/headhunter';
+import {
+  SetDisinterestResponse,
+  SetStudentInterviewResponse,
+} from '../types/headhunter';
 import { GetAllStudentsResponse } from '../types/student';
 
 @Injectable()
@@ -54,6 +57,23 @@ export class HeadhunterService {
 
     foundStudent.status = StudentStatus.INTERVIEW;
     foundStudent.headHunter = hr;
+    await foundStudent.save();
+
+    return {
+      isSuccess: true,
+    };
+  }
+
+  async setDisinterest(id: string): Promise<SetDisinterestResponse> {
+    const foundStudent = await User.findOne({
+      relations: ['headHunter'],
+      where: {
+        id,
+      },
+    });
+
+    foundStudent.status = StudentStatus.AVAILABLE;
+    foundStudent.headHunter = null;
     await foundStudent.save();
 
     return {
