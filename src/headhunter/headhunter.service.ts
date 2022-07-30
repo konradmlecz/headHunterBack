@@ -9,6 +9,20 @@ export class HeadhunterService {
     hr: User,
     id: string,
   ): Promise<SetStudentInterviewResponse> {
+    const reservedStudents = await User.count({
+      relations: ['headHunter'],
+      where: {
+        headHunter: { id: hr.id },
+      },
+    });
+
+    if (reservedStudents >= hr.maxReservedStudents) {
+      throw new HttpException(
+        `Maximum students to be interviwed is ${hr.maxReservedStudents}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const foundStudent = await User.findOne({
       relations: ['headHunter'],
       where: {
