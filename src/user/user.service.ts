@@ -26,7 +26,7 @@ export class UserService {
   // }
 
   async register(id: string, token: string, res: Response) {
-    const student = await User.findOne({
+    const student = await User.findOneOrFail({
       where: {
         id,
         currentTokenId: token,
@@ -38,14 +38,15 @@ export class UserService {
         message: 'Not active link',
       });
     } else {
-      res.redirect('https://wp.pl');
+      console.log();
+      res.redirect(`http://localhost:3001/user/setpassword/${id}`);
     }
   }
 
   async setPassword({ id, pwd }: SetPassword) {
     const foundStudent = await User.findOne({
       where: {
-        id: id,
+        id,
       },
     });
 
@@ -70,6 +71,7 @@ export class UserService {
     });
 
     return {
+      id: foundStudent.id,
       email: foundStudent.email,
     };
   }
