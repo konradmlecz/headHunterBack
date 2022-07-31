@@ -10,6 +10,7 @@ import { AuthService } from '../auth/auth.service';
 import { UserRole } from '../types/user';
 import { registerStudent } from '../user/dto/student-register.dto';
 import * as Joi from 'joi';
+import { HeadhunterDto } from '../headhunter/dto/headhunter.dto';
 
 @Injectable()
 export class AdminService extends AuthService {
@@ -33,7 +34,13 @@ export class AdminService extends AuthService {
         courseEngagement: Joi.number().min(0).max(5),
         projectDegree: Joi.number().min(0).max(5),
         teamProjectDegree: Joi.number().min(0).max(5),
-        bonusProjectUrls: Joi.string(),
+        bonusProjectUrls: Joi.array().items(
+          Joi.string()
+            .regex(
+              /^([A-Za-z0-9]+@|http(|s)\:\/\/)([A-Za-z0-9.]+(:\d+)?)(?::|\/)([\d\/\w.-]+?)(\.git)?$/i,
+            )
+            .required(),
+        ),
       }),
     );
 
@@ -54,17 +61,17 @@ export class AdminService extends AuthService {
           user.courseEngagment = student.courseEngagment;
           user.projectDegree = student.projectDegree;
           user.teamProjectDegree = student.teamProjectDegree;
-          user.bonusProjectUrls = student.bonusProjectUrls;
+          user.bonusProjectUrls = JSON.stringify(student.bonusProjectUrls);
           user.isActive = false;
           user.role = UserRole.STUDENT;
 
           await this.generateToken(user);
           await user.save();
-          await this.mailService.sendMail(
-            user.email,
-            `Head Hunter |MEGAK| - dokończ rejestracje!`,
-            registerEmailTemplate(user.id, user.currentTokenId),
-          );
+          // await this.mailService.sendMail(
+          //   user.email,
+          //   `Head Hunter |MEGAK| - dokończ rejestracje!`,
+          //   registerEmailTemplate(user.id, user.currentTokenId),
+          // );
         });
         await fs.unlink(path.join(storageDir(), 'student', student.filename));
         return { isSuccess: true };
@@ -79,6 +86,35 @@ export class AdminService extends AuthService {
         throw err2;
       }
       throw err;
+    }
+  }
+
+  async addHeadHunter(body: HeadhunterDto) {
+    try {
+      const hr = new User();
+      hr.email = body.email;
+      hr.fullName = body.fullName;
+      hr.company = body.email;
+      hr.maxReservedStudents = body.maxReservedStudents;
+      hr.isActive = false;
+      hr.role = UserRole.HR;
+
+      await this.generateToken(hr);
+      await hr.save();
+      await this.mailService.sendMail(
+        hr.email,
+        `Head Hunter |MEGAK| - dokończ rejestracje!`,
+        registerEmailTemplate(hr.id, hr.currentTokenId),
+      );
+
+      return {
+        isSuccess: true,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        error: error.message,
+      };
     }
   }
 }

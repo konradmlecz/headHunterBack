@@ -20,6 +20,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserRoleGuard } from 'src/guards/user-role.guard';
 import { Response } from 'express';
 import { SetPassword } from '../student/dto/update-student.dto';
+import { UserObj } from '../decorators/user-obj.decorator';
+import { User } from './user.entity';
 
 @Controller('user')
 export class UserController {
@@ -44,14 +46,13 @@ export class UserController {
 
   @Get('/setpassword/:id')
   async beforeSetPassword(
-    @Param() id: string,
+    @Param('id') id: string,
   ): Promise<BeforeSetPasswordResponse> {
     return this.userService.beforeSetPassword(id);
   }
 
   @Post('/setpassword')
   async setPassword(@Body() req: SetPassword): Promise<any> {
-    console.log(1);
     return this.userService.setPassword(req);
   }
 }
