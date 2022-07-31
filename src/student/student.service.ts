@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import {
-  GetAllStudentsResponse,
+  GetStudentsResponse,
   Student,
   UpdateStudentResponse,
 } from '../types/student';
@@ -85,7 +85,7 @@ export class StudentService {
     };
   }
 
-  async getAll(): Promise<GetAllStudentsResponse> {
+  async getAll(): Promise<GetStudentsResponse> {
     const students = await User.find({
       where: {
         role: UserRole.STUDENT,
@@ -105,6 +105,35 @@ export class StudentService {
           fullName,
           company,
           maxReservedStudents,
+          ...other
+        }) => other,
+      ),
+    };
+  }
+
+  async getStudentsForInterview(hr: User): Promise<GetStudentsResponse> {
+    const students = await User.find({
+      relations: ['headHunter'],
+      where: {
+        role: UserRole.STUDENT,
+        isActive: true,
+        status: StudentStatus.INTERVIEW,
+        headHunter: { id: hr.id },
+      },
+    });
+
+    return {
+      isSuccess: true,
+      data: students.map(
+        ({
+          pwd,
+          currentTokenId,
+          isActive,
+          role,
+          fullName,
+          company,
+          maxReservedStudents,
+          headHunter,
           ...other
         }) => other,
       ),

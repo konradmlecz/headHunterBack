@@ -39,7 +39,7 @@ export type UpdateStudentResponse = {
   error?: string;
 };
 
-export type GetAllStudentsResponse = {
+export type GetStudentsResponse = {
   isSuccess: boolean;
   data: Student[];
 };

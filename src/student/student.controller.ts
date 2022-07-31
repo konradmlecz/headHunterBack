@@ -14,7 +14,7 @@ import { StudentService } from './student.service';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from 'src/user/user.entity';
 import {
-  GetAllStudentsResponse,
+  GetStudentsResponse,
   Student,
   UpdateStudentResponse,
 } from '../types/student';
@@ -44,8 +44,17 @@ export class StudentController {
   @Get('/all')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
-  getAllStudents(): Promise<GetAllStudentsResponse> {
+  getAllStudents(): Promise<GetStudentsResponse> {
     return this.studentService.getAll();
+  }
+
+  @Get('/for-interview')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  async getStudentsForInterview(
+    @UserObj() hr: User,
+  ): Promise<GetStudentsResponse> {
+    return this.studentService.getStudentsForInterview(hr);
   }
 
   @Patch('/employed')
