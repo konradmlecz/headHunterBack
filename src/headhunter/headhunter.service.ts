@@ -5,6 +5,7 @@ import {
   SetDisinterestResponse,
   SetStudentInterviewResponse,
 } from '../types/headhunter';
+import { UpdateStudentResponse } from '../types/student';
 
 @Injectable()
 export class HeadhunterService {
@@ -64,5 +65,29 @@ export class HeadhunterService {
     return {
       isSuccess: true,
     };
+  }
+
+  async setEmployed(id: string): Promise<UpdateStudentResponse> {
+    try {
+      const foundStudent = await User.findOne({
+        where: {
+          id,
+        },
+      });
+
+      foundStudent.status = StudentStatus.EMPLOYED;
+      foundStudent.isActive = false;
+      foundStudent.currentTokenId = null;
+      await foundStudent.save();
+
+      return {
+        isSuccess: true,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        error: error.message,
+      };
+    }
   }
 }

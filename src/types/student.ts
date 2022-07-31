@@ -36,6 +36,7 @@ export interface Student {
 
 export type UpdateStudentResponse = {
   isSuccess: boolean;
+  error?: string;
 };
 
 export type GetAllStudentsResponse = {
