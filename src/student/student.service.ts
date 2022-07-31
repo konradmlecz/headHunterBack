@@ -85,7 +85,7 @@ export class StudentService {
     };
   }
 
-  async getAll(): Promise<GetAllStudentsResponse[]> {
+  async getAll(): Promise<GetAllStudentsResponse> {
     const students = await User.find({
       where: {
         role: UserRole.STUDENT,
@@ -94,9 +94,21 @@ export class StudentService {
       },
     });
 
-    return students.map(
-      ({ pwd, currentTokenId, isActive, status, role, ...other }) => other,
-    );
+    return {
+      isSuccess: true,
+      data: students.map(
+        ({
+          pwd,
+          currentTokenId,
+          isActive,
+          role,
+          fullName,
+          company,
+          maxReservedStudents,
+          ...other
+        }) => other,
+      ),
+    };
   }
 
   async setEmployed(student: User): Promise<UpdateStudentResponse> {
