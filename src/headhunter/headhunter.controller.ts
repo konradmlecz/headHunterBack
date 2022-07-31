@@ -10,6 +10,7 @@ import {
   SetDisinterestResponse,
   SetStudentInterviewResponse,
 } from '../types/headhunter';
+import { UpdateStudentResponse } from '../types/student';
 
 @Controller('headhunter')
 export class HeadhunterController {
@@ -34,5 +35,12 @@ export class HeadhunterController {
     @Param('id') id: string,
   ): Promise<SetDisinterestResponse> {
     return this.headhunterService.setDisinterest(id);
+  }
+
+  @Patch('/employed/:id')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  async setEmployed(@Param('id') id: string): Promise<UpdateStudentResponse> {
+    return this.headhunterService.setEmployed(id);
   }
 }
