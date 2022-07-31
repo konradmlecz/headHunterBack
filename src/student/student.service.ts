@@ -10,48 +10,23 @@ import { StudentStatus, UserRole } from '../types/user';
 
 @Injectable()
 export class StudentService {
-  getProfile(student: User): Student {
+  filter(student: User): Student {
     const {
-      id,
-      email,
-      phone,
-      firstName,
-      lastName,
-      githubUsername,
-      portfolioUrls,
-      projectUrls,
-      bio,
-      expectedTypeWork,
-      targetWorkCity,
-      expectedContractType,
-      expectedSalary,
-      canTakeApprenticeship,
-      monthsOfCommercialExp,
-      education,
-      workExperience,
-      courses,
+      pwd,
+      currentTokenId,
+      isActive,
+      role,
+      fullName,
+      company,
+      maxReservedStudents,
+      headHunter,
+      ...other
     } = student;
+    return other;
+  }
 
-    return {
-      id,
-      email,
-      phone,
-      firstName,
-      lastName,
-      githubUsername,
-      portfolioUrls,
-      projectUrls,
-      bio,
-      expectedTypeWork,
-      targetWorkCity,
-      expectedContractType,
-      expectedSalary,
-      canTakeApprenticeship,
-      monthsOfCommercialExp,
-      education,
-      workExperience,
-      courses,
-    };
+  getProfile(student: User): Student {
+    return this.filter(student);
   }
 
   async update(
@@ -96,18 +71,7 @@ export class StudentService {
 
     return {
       isSuccess: true,
-      data: students.map(
-        ({
-          pwd,
-          currentTokenId,
-          isActive,
-          role,
-          fullName,
-          company,
-          maxReservedStudents,
-          ...other
-        }) => other,
-      ),
+      data: students.map((student) => this.filter(student)),
     };
   }
 
@@ -124,19 +88,7 @@ export class StudentService {
 
     return {
       isSuccess: true,
-      data: students.map(
-        ({
-          pwd,
-          currentTokenId,
-          isActive,
-          role,
-          fullName,
-          company,
-          maxReservedStudents,
-          headHunter,
-          ...other
-        }) => other,
-      ),
+      data: students.map((student) => this.filter(student)),
     };
   }
 
