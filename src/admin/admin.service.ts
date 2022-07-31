@@ -7,7 +7,7 @@ import { User } from '../user/user.entity';
 import { MailService } from '../mail/mail.service';
 import { registerEmailTemplate } from '../templates/email/register';
 import { AuthService } from '../auth/auth.service';
-import { UserRole } from '../types/user';
+import { StudentStatus, UserRole } from '../types/user';
 import { registerStudent } from '../user/dto/student-register.dto';
 import * as Joi from 'joi';
 import { HeadhunterDto } from '../headhunter/dto/headhunter.dto';
@@ -63,6 +63,7 @@ export class AdminService extends AuthService {
           user.teamProjectDegree = student.teamProjectDegree;
           user.bonusProjectUrls = JSON.stringify(student.bonusProjectUrls);
           user.isActive = false;
+          user.status = StudentStatus.AVAILABLE;
           user.role = UserRole.STUDENT;
 
           await this.generateToken(user);

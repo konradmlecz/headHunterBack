@@ -55,6 +55,7 @@ export class UserService {
 
     foundStudent.currentTokenId = null;
     foundStudent.pwd = hashedPwd;
+    foundStudent.isActive = true;
 
     await foundStudent.save();
 
