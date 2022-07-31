@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Patch,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { StudentService } from './student.service';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from 'src/user/user.entity';
 import {
+  GetOneStudentResponse,
   GetStudentsResponse,
   Student,
   UpdateStudentResponse,
@@ -41,11 +43,18 @@ export class StudentController {
     return this.studentService.update(student, profile);
   }
 
-  @Get('/all')
+  @Get('/')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
   getAllStudents(): Promise<GetStudentsResponse> {
     return this.studentService.getAll();
+  }
+
+  @Get('/:id')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  getOneStudent(@Param('id') id: string): Promise<GetOneStudentResponse> {
+    return this.studentService.getOneStudent(id);
   }
 
   @Get('/for-interview')

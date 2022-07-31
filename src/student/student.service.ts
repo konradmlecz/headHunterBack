@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import {
+  GetOneStudentResponse,
   GetStudentsResponse,
   Student,
   UpdateStudentResponse,
@@ -57,6 +58,20 @@ export class StudentService {
 
     return {
       isSuccess: true,
+    };
+  }
+
+  async getOneStudent(id: string): Promise<GetOneStudentResponse> {
+    const student = await User.findOne({
+      where: {
+        id: id,
+        role: UserRole.STUDENT,
+        isActive: true,
+      },
+    });
+    return {
+      isSuccess: true,
+      data: this.filter(student),
     };
   }
 
