@@ -38,7 +38,7 @@ export type UpdateStudentResponse = {
   isSuccess: boolean;
 };
 
-export type GetAllStudentsResponse = {
+export type GetStudentsResponse = {
   isSuccess: boolean;
   data: Student[];
 };
