@@ -47,4 +47,5 @@ export type GetOneStudentResponse = {
 export type GetStudentsResponse = {
   isSuccess: boolean;
   data: Student[];
+  totalPages: number;
 };
