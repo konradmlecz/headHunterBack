@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Inject,
-  Param,
-  Patch,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Inject, Param, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRoleGuard } from '../guards/user-role.guard';
 import { Role } from '../decorators/user-role.decorator';
@@ -17,20 +10,12 @@ import {
   SetDisinterestResponse,
   SetStudentInterviewResponse,
 } from '../types/headhunter';
-import { GetAllStudentsResponse } from '../types/student';
 
 @Controller('headhunter')
 export class HeadhunterController {
   constructor(
     @Inject(HeadhunterService) private headhunterService: HeadhunterService,
   ) {}
-
-  @Get('/all-students')
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @Role(UserRole.HR)
-  getAllStudents(): Promise<GetAllStudentsResponse[]> {
-    return this.headhunterService.getAll();
-  }
 
   @Patch('/interview/:id')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
