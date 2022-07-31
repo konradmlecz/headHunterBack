@@ -4,6 +4,6 @@ import { HeadhunterService } from './headhunter.service';
 
 @Module({
   controllers: [HeadhunterController],
-  providers: [HeadhunterService]
+  providers: [HeadhunterService],
 })
 export class HeadhunterModule {}

@@ -1,5 +1,12 @@
 import { expectedContractType, expectedTypeWork } from 'src/types/student';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { StudentStatus, UserRole } from '../types/user';
 
 @Entity()
@@ -192,4 +199,10 @@ export class User extends BaseEntity {
     default: null,
   })
   bonusProjectUrls: string | null;
+
+  @ManyToOne((type) => User, (entity) => entity.interviewStudent)
+  headHunter: User;
+
+  @OneToMany((type) => User, (entity) => entity.headHunter)
+  interviewStudent: User[];
 }
