@@ -38,9 +38,7 @@ export type UpdateStudentResponse = {
   isSuccess: boolean;
 };
 
-export interface GetAllStudentsResponse extends Student {
-  courseCompletion: number;
-  courseEngagment: number;
-  projectDegree: number;
-  teamProjectDegree: number;
-}
+export type GetAllStudentsResponse = {
+  isSuccess: boolean;
+  data: Student[];
+};

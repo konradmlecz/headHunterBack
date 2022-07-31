@@ -44,7 +44,7 @@ export class StudentController {
   @Get('/all')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
-  getAllStudents(): Promise<GetAllStudentsResponse[]> {
+  getAllStudents(): Promise<GetAllStudentsResponse> {
     return this.studentService.getAll();
   }
 
