@@ -62,7 +62,6 @@ export class StudentService {
     };
   }
 
-
   async getOneStudent(id: string): Promise<GetOneStudentResponse> {
     const student = await User.findOne({
       where: {

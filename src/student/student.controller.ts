@@ -52,15 +52,7 @@ export class StudentController {
     return this.studentService.getAll(pageNumber);
   }
 
-  @Get('/:id')
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @Role(UserRole.HR)
-  getOneStudent(@Param('id') id: string): Promise<GetOneStudentResponse> {
-    return this.studentService.getOneStudent(id);
-  }
-
   @Get('/for-interview/:pageNumber?')
-
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
   async getStudentsForInterview(
@@ -68,6 +60,13 @@ export class StudentController {
     @Param('pageNumber') pageNumber = 1,
   ): Promise<GetStudentsResponse> {
     return this.studentService.getStudentsForInterview(hr, pageNumber);
+  }
+
+  @Get('/:id')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  getOneStudent(@Param('id') id: string): Promise<GetOneStudentResponse> {
+    return this.studentService.getOneStudent(id);
   }
 
   @Patch('/employed')
