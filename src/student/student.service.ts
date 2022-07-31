@@ -7,9 +7,25 @@ import {
 } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentStatus, UserRole } from '../types/user';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class StudentService {
+  filter(student: User): Student {
+    const {
+      pwd,
+      currentTokenId,
+      isActive,
+      role,
+      fullName,
+      company,
+      maxReservedStudents,
+      headHunter,
+      ...other
+    } = student;
+    return other;
+  }
+
   getProfile(student: User): Student {
     const {
       id,
@@ -85,34 +101,37 @@ export class StudentService {
     };
   }
 
-  async getAll(): Promise<GetStudentsResponse> {
-    const students = await User.find({
+  async getAll(pageNumber: number): Promise<GetStudentsResponse> {
+    const maxPerPage = 10;
+    const currentPage = Number(pageNumber);
+
+    const [data, pagesCount] = await User.findAndCount({
       where: {
         role: UserRole.STUDENT,
         isActive: true,
         status: StudentStatus.AVAILABLE,
       },
+      skip: maxPerPage * (currentPage - 1),
+      take: maxPerPage,
     });
+
+    const totalPages = Math.ceil(pagesCount / maxPerPage);
 
     return {
       isSuccess: true,
-      data: students.map(
-        ({
-          pwd,
-          currentTokenId,
-          isActive,
-          role,
-          fullName,
-          company,
-          maxReservedStudents,
-          ...other
-        }) => other,
-      ),
+      data: data.map((student) => this.filter(student)),
+      totalPages,
     };
   }
 
-  async getStudentsForInterview(hr: User): Promise<GetStudentsResponse> {
-    const students = await User.find({
+  async getStudentsForInterview(
+    hr: User,
+    pageNumber: number,
+  ): Promise<GetStudentsResponse> {
+    const maxPerPage = 10;
+    const currentPage = Number(pageNumber);
+
+    const [data, pagesCount] = await User.findAndCount({
       relations: ['headHunter'],
       where: {
         role: UserRole.STUDENT,
@@ -120,23 +139,16 @@ export class StudentService {
         status: StudentStatus.INTERVIEW,
         headHunter: { id: hr.id },
       },
+      skip: maxPerPage * (currentPage - 1),
+      take: maxPerPage,
     });
+
+    const totalPages = Math.ceil(pagesCount / maxPerPage);
 
     return {
       isSuccess: true,
-      data: students.map(
-        ({
-          pwd,
-          currentTokenId,
-          isActive,
-          role,
-          fullName,
-          company,
-          maxReservedStudents,
-          headHunter,
-          ...other
-        }) => other,
-      ),
+      data: data.map((student) => this.filter(student)),
+      totalPages,
     };
   }
 

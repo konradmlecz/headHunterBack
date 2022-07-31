@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Patch,
   UseGuards,
 } from '@nestjs/common';
@@ -41,20 +42,23 @@ export class StudentController {
     return this.studentService.update(student, profile);
   }
 
-  @Get('/all')
+  @Get('/all/:pageNumber?')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
-  getAllStudents(): Promise<GetStudentsResponse> {
-    return this.studentService.getAll();
+  getAllStudents(
+    @Param('pageNumber') pageNumber = 1,
+  ): Promise<GetStudentsResponse> {
+    return this.studentService.getAll(pageNumber);
   }
 
-  @Get('/for-interview')
+  @Get('/for-interview/:pageNumber?')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
   async getStudentsForInterview(
     @UserObj() hr: User,
+    @Param('pageNumber') pageNumber = 1,
   ): Promise<GetStudentsResponse> {
-    return this.studentService.getStudentsForInterview(hr);
+    return this.studentService.getStudentsForInterview(hr, pageNumber);
   }
 
   @Patch('/employed')
