@@ -16,13 +16,13 @@ import { StudentService } from './student.service';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from 'src/user/user.entity';
 import {
-  FilterStudent,
   GetOneStudentResponse,
   GetStudentsResponse,
   Student,
   UpdateStudentResponse,
 } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { FilterStudent } from './dto/filter-student.dto';
 
 @Controller('student')
 export class StudentController {
