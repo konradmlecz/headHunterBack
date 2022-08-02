@@ -70,8 +70,3 @@ export class UpdateStudentDto {
   @IsString()
   courses: string;
 }
-
-export interface SetPassword {
-  id: string;
-  pwd: string;
-}
