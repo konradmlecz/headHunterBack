@@ -13,7 +13,10 @@ export class HeadhunterDto {
   email: string;
   @IsNotEmpty()
   @IsString()
-  fullName: string;
+  firstName: string;
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
   @IsNotEmpty()
   @IsString()
   company: string;

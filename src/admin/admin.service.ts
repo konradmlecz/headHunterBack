@@ -94,7 +94,8 @@ export class AdminService extends AuthService {
     try {
       const hr = new User();
       hr.email = body.email;
-      hr.fullName = body.fullName;
+      hr.firstName = body.firstName;
+      hr.lastName = body.lastName;
       hr.company = body.email;
       hr.maxReservedStudents = body.maxReservedStudents;
       hr.isActive = false;
