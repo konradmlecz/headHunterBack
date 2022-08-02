@@ -122,7 +122,6 @@ export class StudentService {
 
     return {
       isSuccess: true,
-
       data: data.map((student) => this.filter(student)),
       totalPages,
     };
@@ -142,6 +141,25 @@ export class StudentService {
 
     return {
       isSuccess: true,
+    };
+  }
+
+  async setFilter(body: any) {
+    const maxPerPage = 10;
+    const currentPage = 1;
+
+    const [data, pagesCount] = await User.findAndCount({
+      where: body,
+      skip: maxPerPage * (currentPage - 1),
+      take: maxPerPage,
+    });
+
+    const totalPages = Math.ceil(pagesCount / maxPerPage);
+
+    return {
+      isSuccess: true,
+      data: data.map((student) => this.filter(student)),
+      totalPages,
     };
   }
 }

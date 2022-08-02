@@ -49,3 +49,15 @@ export type GetStudentsResponse = {
   data: Student[];
   totalPages: number;
 };
+
+export type FilterStudent = {
+  courseEngagment?: number;
+  courseCompletion?: number;
+  projectDegree?: number;
+  teamProjectDegree?: number;
+  expectedTypeWork?: expectedTypeWork;
+  expectedSalary?: number;
+  expectedContractType?: expectedContractType;
+  canTakeApprenticeship?: boolean;
+  monthsOfCommercialExp?: number;
+};
