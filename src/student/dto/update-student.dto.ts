@@ -17,7 +17,6 @@ export class UpdateStudentDto {
   email: string;
 
   @IsInt()
-  @Length(9, 11)
   phone: number;
 
   @IsString()
@@ -61,8 +60,14 @@ export class UpdateStudentDto {
   @IsInt()
   @Min(0)
   monthsOfCommercialExp: number;
+
+  @IsString()
   education: string;
+
+  @IsString()
   workExperience: string;
+
+  @IsString()
   courses: string;
 }
 
