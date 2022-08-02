@@ -5,6 +5,7 @@ import {
   Inject,
   Post,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
@@ -17,6 +18,10 @@ import { registerEmailTemplate } from '../templates/email/register';
 import { ImportStudentsResponse } from '../interfaces/admin';
 import { HeadhunterDto } from '../headhunter/dto/headhunter.dto';
 import { AddHeadHunterResponse } from '../types/headhunter';
+import { AuthGuard } from '@nestjs/passport';
+import { UserRoleGuard } from '../guards/user-role.guard';
+import { Role } from '../decorators/user-role.decorator';
+import { UserRole } from '../types/user';
 
 @Controller('admin')
 export class AdminController {
@@ -26,6 +31,8 @@ export class AdminController {
   ) {}
 
   @Post('/import')
+  //@UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  //@Role(UserRole.ADMIN)
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -44,6 +51,8 @@ export class AdminController {
   }
 
   @Post('/headhunter')
+  //@UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  //@Role(UserRole.ADMIN)
   addHeadHunter(@Body() body: HeadhunterDto): Promise<AddHeadHunterResponse> {
     return this.adminService.addHeadHunter(body);
   }
