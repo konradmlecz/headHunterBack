@@ -143,9 +143,9 @@ export class StudentService {
     };
   }
 
-  async setFilter(body: any) {
+  async setFilter(body: any, pageNumber: number) {
     const maxPerPage = 10;
-    const currentPage = 1;
+    const currentPage = pageNumber;
 
     const [data, pagesCount] = await User.findAndCount({
       where: body,

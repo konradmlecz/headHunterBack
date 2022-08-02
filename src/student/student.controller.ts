@@ -78,10 +78,13 @@ export class StudentController {
     return this.studentService.setEmployed(student);
   }
 
-  @Post('/set-filter')
+  @Post('/set-filter/:pageNumber?')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
-  setFilter(@Body() body: FilterStudent): Promise<GetStudentsResponse> {
-    return this.studentService.setFilter(body);
+  setFilter(
+    @Body() body: FilterStudent,
+    @Param('pageNumber') pageNumber = 1,
+  ): Promise<GetStudentsResponse> {
+    return this.studentService.setFilter(body, pageNumber);
   }
 }
