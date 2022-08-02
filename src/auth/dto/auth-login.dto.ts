@@ -5,6 +5,7 @@ export class AuthLoginDto {
   @IsNotEmpty()
   @Length(3, 255)
   email: string;
+
   @IsString()
   pwd: string;
 }
