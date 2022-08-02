@@ -29,11 +29,11 @@ export class AdminService extends AuthService {
 
     const schema = Joi.array().items(
       Joi.object().keys({
-        email: Joi.string().email(),
-        courseCompletion: Joi.number().min(0).max(5),
-        courseEngagement: Joi.number().min(0).max(5),
-        projectDegree: Joi.number().min(0).max(5),
-        teamProjectDegree: Joi.number().min(0).max(5),
+        email: Joi.string().email().required(),
+        courseCompletion: Joi.number().min(0).max(5).required(),
+        courseEngagement: Joi.number().min(0).max(5).required(),
+        projectDegree: Joi.number().min(0).max(5).required(),
+        teamProjectDegree: Joi.number().min(0).max(5).required(),
         bonusProjectUrls: Joi.array().items(
           Joi.string()
             .regex(

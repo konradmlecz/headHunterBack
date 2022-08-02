@@ -5,6 +5,7 @@ import {
   Inject,
   Param,
   Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,6 +22,7 @@ import {
   UpdateStudentResponse,
 } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { FilterStudent } from './dto/filter-student.dto';
 
 @Controller('student')
 export class StudentController {
@@ -74,5 +76,12 @@ export class StudentController {
   @Role(UserRole.STUDENT)
   async setEmployed(@UserObj() student: User): Promise<UpdateStudentResponse> {
     return this.studentService.setEmployed(student);
+  }
+
+  @Post('/set-filter')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
+  setFilter(@Body() body: FilterStudent): Promise<GetStudentsResponse> {
+    return this.studentService.setFilter(body);
   }
 }
