@@ -8,7 +8,6 @@ import {
 } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentStatus, UserRole } from '../types/user';
-import { filter } from 'rxjs';
 
 @Injectable()
 export class StudentService {
@@ -122,7 +121,6 @@ export class StudentService {
 
     return {
       isSuccess: true,
-
       data: data.map((student) => this.filter(student)),
       totalPages,
     };

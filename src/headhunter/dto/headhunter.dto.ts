@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  Length,
   Max,
   Min,
 } from 'class-validator';
@@ -10,13 +11,23 @@ import {
 export class HeadhunterDto {
   @IsEmail()
   @IsNotEmpty()
+  @Length(3, 255)
   email: string;
-  @IsNotEmpty()
+
   @IsString()
-  fullName: string;
+  @IsNotEmpty()
+  @Length(3, 13)
+  firstName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(2, 28)
+  lastName: string;
+
   @IsNotEmpty()
   @IsString()
   company: string;
+
   @IsNumber()
   @IsNotEmpty()
   @Min(1)

@@ -1,11 +1,17 @@
 import { UserRole } from '../../types/user';
-import { IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class RegisterAdminDto {
-  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  @Length(3, 255)
   email: string;
+
+  @IsNotEmpty()
   @IsString()
   pwd: string;
-  @IsString()
+
+  @IsNotEmpty()
+  @IsEnum(UserRole)
   role: UserRole;
 }

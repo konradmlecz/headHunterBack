@@ -8,7 +8,7 @@ import { MailService } from '../mail/mail.service';
 import { registerEmailTemplate } from '../templates/email/register';
 import { AuthService } from '../auth/auth.service';
 import { StudentStatus, UserRole } from '../types/user';
-import { registerStudent } from '../user/dto/student-register.dto';
+import { RegisterStudentDto } from '../user/dto/student-register.dto';
 import * as Joi from 'joi';
 import { HeadhunterDto } from '../headhunter/dto/headhunter.dto';
 
@@ -20,7 +20,7 @@ export class AdminService extends AuthService {
 
   async import(files: MulterDiskUploadedFiles) {
     const student = (await files?.studentData?.[0]) ?? null;
-    const studentsData: registerStudent[] = JSON.parse(
+    const studentsData: RegisterStudentDto[] = JSON.parse(
       await fs.readFile(
         path.join(storageDir(), 'student', `${student.filename}`),
         'utf-8',
@@ -54,7 +54,7 @@ export class AdminService extends AuthService {
           errors: result.error.details,
         };
       } else {
-        studentsData.map(async (student: registerStudent) => {
+        studentsData.map(async (student: RegisterStudentDto) => {
           const user = new User();
           user.email = student.email;
           user.courseCompletion = student.courseCompletion;
@@ -94,7 +94,8 @@ export class AdminService extends AuthService {
     try {
       const hr = new User();
       hr.email = body.email;
-      hr.fullName = body.fullName;
+      hr.firstName = body.firstName;
+      hr.lastName = body.lastName;
       hr.company = body.email;
       hr.maxReservedStudents = body.maxReservedStudents;
       hr.isActive = false;
