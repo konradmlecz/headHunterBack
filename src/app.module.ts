@@ -9,6 +9,7 @@ import { StudentModule } from './student/student.module';
 import { MailModule } from './mail/mail.module';
 import { AdminModule } from './admin/admin.module';
 import { HeadhunterModule } from './headhunter/headhunter.module';
+import { CronModule } from './cron/cron.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { HeadhunterModule } from './headhunter/headhunter.module';
     HeadhunterModule,
     MailModule,
     AdminModule,
+    CronModule,
   ],
 
   controllers: [AppController],
