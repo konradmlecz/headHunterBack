@@ -8,6 +8,7 @@ import {
 } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentStatus, UserRole } from '../types/user';
+import { Between, In, MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class StudentService {
@@ -148,7 +149,17 @@ export class StudentService {
     const currentPage = pageNumber;
 
     const [data, pagesCount] = await User.findAndCount({
-      where: body,
+      where: {
+        courseEngagment: In(body.courseEngagment),
+        courseCompletion: In(body.courseCompletion),
+        projectDegree: In(body.projectDegree),
+        teamProjectDegree: In(body.teamProjectDegree),
+        expectedTypeWork: In(body.expectedTypeWork),
+        expectedContractType: In(body.expectedContractType),
+        canTakeApprenticeship: In(body.canTakeApprenticeship),
+        monthsOfCommercialExp: MoreThanOrEqual(body.monthsOfCommercialExp),
+        expectedSalary: Between(body.expectedSalary[0], body.expectedSalary[1]),
+      },
       skip: maxPerPage * (currentPage - 1),
       take: maxPerPage,
     });

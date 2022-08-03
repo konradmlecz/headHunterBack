@@ -1,52 +1,53 @@
-import { expectedContractType } from 'src/types/student';
-
-import { expectedTypeWork } from 'src/types/student';
-import {
-  IsBoolean,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
+import { expectedContractType, expectedTypeWork } from 'src/types/student';
+import { IsOptional } from 'class-validator';
 
 export class FilterStudent {
   @IsOptional()
-  @IsNumber()
-  @Min(1)
-  @Max(5)
-  courseEngagment?: number;
+  courseEngagment: number[] = [1, 2, 3, 4, 5];
+  // @IsOptional()
+  // @IsNumber()
+  // @Min(1)
+  // @Max(5)
   @IsOptional()
-  @IsNumber()
-  @Min(1)
-  @Max(5)
-  courseCompletion?: number;
+  courseCompletion: number[] = [1, 2, 3, 4, 5];
   @IsOptional()
-  @IsNumber()
-  @Min(1)
-  @Max(5)
-  projectDegree?: number;
+  // @IsNumber()
+  // @Min(1)
+  // @Max(5)
   @IsOptional()
-  @IsNumber()
-  @Min(1)
-  @Max(5)
-  teamProjectDegree?: number;
+  projectDegree: number[] = [1, 2, 3, 4, 5];
+  // @IsOptional()
+  // @IsNumber()
+  // @Min(1)
+  // @Max(5)
   @IsOptional()
-  @IsString()
-  @IsEnum(expectedTypeWork)
-  expectedTypeWork?: expectedTypeWork;
+  teamProjectDegree: number[] = [1, 2, 3, 4, 5];
   @IsOptional()
-  @IsNumber()
-  expectedSalary?: number;
+  expectedTypeWork: expectedTypeWork[] = [
+    null,
+    expectedTypeWork.HEBRID,
+    expectedTypeWork.ONSITE,
+    expectedTypeWork.NOMETTER,
+    expectedTypeWork.RELOCATION,
+    expectedTypeWork.NOMETTER,
+  ];
   @IsOptional()
-  @IsString()
-  @IsEnum(expectedTypeWork)
-  expectedContractType?: expectedContractType;
+  // @IsString()
+  // @IsEnum(expectedTypeWork)
+  expectedContractType: expectedContractType[] = [
+    null,
+    expectedContractType.B2B,
+    expectedContractType.NO,
+    expectedContractType.UOP,
+    expectedContractType.UZ,
+  ];
   @IsOptional()
-  @IsBoolean()
-  canTakeApprenticeship?: boolean;
+  // @IsNumber()
+  expectedSalary: number[] = [0, 999999];
   @IsOptional()
-  @IsNumber()
-  monthsOfCommercialExp?: number;
+  // @IsBoolean()
+  canTakeApprenticeship: boolean[] = [true, false];
+  @IsOptional()
+  // @IsNumber()
+  monthsOfCommercialExp: number = 0;
 }

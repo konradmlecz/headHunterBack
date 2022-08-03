@@ -4,6 +4,7 @@ import {
   Get,
   Inject,
   Param,
+  ParseArrayPipe,
   Patch,
   Post,
   UseGuards,
@@ -79,10 +80,13 @@ export class StudentController {
   }
 
   @Post('/set-filter/:pageNumber?')
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @Role(UserRole.HR)
+  //@UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  //@Role(UserRole.HR)
+  //FilterStudent GetStudentsResponse
+  //new ParseArrayPipe({ items: FilterStudent, whitelist: true })
   setFilter(
-    @Body() body: FilterStudent,
+    @Body()
+    body: FilterStudent,
     @Param('pageNumber') pageNumber = 1,
   ): Promise<GetStudentsResponse> {
     return this.studentService.setFilter(body, pageNumber);
