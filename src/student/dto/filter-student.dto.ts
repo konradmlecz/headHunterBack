@@ -3,6 +3,7 @@ import {
   ArrayMaxSize,
   IsArray,
   IsBoolean,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -10,6 +11,7 @@ import {
 import { Type } from 'class-transformer';
 
 export class FilterStudent {
+  @IsNotEmpty()
   @IsArray()
   @IsNumber({}, { each: true })
   @IsOptional()

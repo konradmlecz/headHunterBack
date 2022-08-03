@@ -147,30 +147,34 @@ export class StudentService {
 
   async setFilter(body: any, pageNumber: number) {
     const schema = Joi.object().keys({
-      courseEngagment: Joi.array().items(Joi.number().min(1).max(5)),
-      courseCompletion: Joi.array().items(Joi.number().min(1).max(5)),
-      projectDegree: Joi.array().items(Joi.number().min(1).max(5)),
-      teamProjectDegree: Joi.array().items(Joi.number().min(1).max(5)),
-      expectedTypeWork: Joi.array().items(
-        Joi.string().valid(
-          'Na miejscu',
-          'Gotowość do przeprowadzki',
-          'Wyłącznie zdalnie',
-          'Hybrydowo',
-          'Bez znaczenia',
+      courseEngagment: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      courseCompletion: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      projectDegree: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      teamProjectDegree: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      expectedTypeWork: Joi.array()
+        .min(1)
+        .items(
+          Joi.string().valid(
+            'Na miejscu',
+            'Gotowość do przeprowadzki',
+            'Wyłącznie zdalnie',
+            'Hybrydowo',
+            'Bez znaczenia',
+          ),
         ),
-      ),
-      expectedContractType: Joi.array().items(
-        Joi.string().valid(
-          'Tylko UoP',
-          'Możliwe B2B',
-          'Możliwe UZ/UoD',
-          'Brak',
+      expectedContractType: Joi.array()
+        .min(1)
+        .items(
+          Joi.string().valid(
+            'Tylko UoP',
+            'Możliwe B2B',
+            'Możliwe UZ/UoD',
+            'Brak',
+          ),
         ),
-      ),
-      expectedSalary: Joi.array().items(Joi.number().min(0).max(999999)),
-      canTakeApprenticeship: Joi.array().items(Joi.boolean()),
-      monthsOfCommercialExp: Joi.array().items(Joi.number().max(120)),
+      expectedSalary: Joi.array().min(1).items(Joi.number().min(0).max(999999)),
+      canTakeApprenticeship: Joi.array().min(1).items(Joi.boolean()),
+      monthsOfCommercialExp: Joi.array().min(1).items(Joi.number().max(120)),
     });
 
     const result = await schema.validate(body, { abortEarly: false });

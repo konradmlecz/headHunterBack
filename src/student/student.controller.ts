@@ -80,8 +80,8 @@ export class StudentController {
   }
 
   @Post('/set-filter/:pageNumber?')
-  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  @Role(UserRole.HR)
+  //@UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  //@Role(UserRole.HR)
   setFilter(
     @Body()
     body: FilterStudent,
