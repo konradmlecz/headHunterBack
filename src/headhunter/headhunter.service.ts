@@ -6,6 +6,7 @@ import {
   SetStudentInterviewResponse,
 } from '../types/headhunter';
 import { UpdateStudentResponse } from '../types/student';
+import { StudentToInterview } from "../student/student-to-interview.entity";
 
 @Injectable()
 export class HeadhunterService {
@@ -13,6 +14,7 @@ export class HeadhunterService {
     hr: User,
     id: string,
   ): Promise<SetStudentInterviewResponse> {
+
     const reservedStudents = await User.count({
       relations: ['headHunter'],
       where: {
@@ -45,6 +47,17 @@ export class HeadhunterService {
     foundStudent.headHunter = hr;
     await foundStudent.save();
 
+
+    const foundStudentToInterview = await StudentToInterview.findOne({where : {studentId : id}});
+    if (foundStudentToInterview) {
+      await foundStudentToInterview.remove()
+    }
+    const newStudentToInterview = new StudentToInterview();
+    newStudentToInterview.studentId = id;
+    newStudentToInterview.createdAt = new Date();
+    await newStudentToInterview.save()
+
+
     return {
       isSuccess: true,
     };
@@ -61,6 +74,12 @@ export class HeadhunterService {
     foundStudent.status = StudentStatus.AVAILABLE;
     foundStudent.headHunter = null;
     await foundStudent.save();
+
+
+    const foundStudentToInterview = await StudentToInterview.findOne({where : {studentId : id}});
+    if (foundStudentToInterview) {
+      await foundStudentToInterview.remove()
+    }
 
     return {
       isSuccess: true,
@@ -79,6 +98,11 @@ export class HeadhunterService {
       foundStudent.isActive = false;
       foundStudent.currentTokenId = null;
       await foundStudent.save();
+
+      const foundStudentToInterview = await StudentToInterview.findOne({where : {studentId : id}});
+      if (foundStudentToInterview) {
+        await foundStudentToInterview.remove()
+      }
 
       return {
         isSuccess: true,
