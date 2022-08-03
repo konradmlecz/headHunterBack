@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import {
   GetOneStudentResponse,
@@ -8,7 +8,8 @@ import {
 } from '../types/student';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentStatus, UserRole } from '../types/user';
-import { Between, In, MoreThanOrEqual } from 'typeorm';
+import { databaseProviders } from '../database.providers';
+import * as Joi from 'joi';
 
 @Injectable()
 export class StudentService {
@@ -145,31 +146,107 @@ export class StudentService {
   }
 
   async setFilter(body: any, pageNumber: number) {
-    const maxPerPage = 10;
-    const currentPage = pageNumber;
-
-    const [data, pagesCount] = await User.findAndCount({
-      where: {
-        courseEngagment: In(body.courseEngagment),
-        courseCompletion: In(body.courseCompletion),
-        projectDegree: In(body.projectDegree),
-        teamProjectDegree: In(body.teamProjectDegree),
-        expectedTypeWork: In(body.expectedTypeWork),
-        expectedContractType: In(body.expectedContractType),
-        canTakeApprenticeship: In(body.canTakeApprenticeship),
-        monthsOfCommercialExp: MoreThanOrEqual(body.monthsOfCommercialExp),
-        expectedSalary: Between(body.expectedSalary[0], body.expectedSalary[1]),
-      },
-      skip: maxPerPage * (currentPage - 1),
-      take: maxPerPage,
+    const schema = Joi.object().keys({
+      courseEngagment: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      courseCompletion: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      projectDegree: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      teamProjectDegree: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      expectedTypeWork: Joi.array()
+        .min(1)
+        .items(
+          Joi.string().valid(
+            'Na miejscu',
+            'Gotowość do przeprowadzki',
+            'Wyłącznie zdalnie',
+            'Hybrydowo',
+            'Bez znaczenia',
+          ),
+        ),
+      expectedContractType: Joi.array()
+        .min(1)
+        .items(
+          Joi.string().valid(
+            'Tylko UoP',
+            'Możliwe B2B',
+            'Możliwe UZ/UoD',
+            'Brak',
+          ),
+        ),
+      expectedSalary: Joi.array().min(1).items(Joi.number().min(0).max(999999)),
+      canTakeApprenticeship: Joi.array().min(1).items(Joi.boolean()),
+      monthsOfCommercialExp: Joi.array().min(1).items(Joi.number().max(120)),
     });
 
-    const totalPages = Math.ceil(pagesCount / maxPerPage);
+    const result = await schema.validate(body, { abortEarly: false });
 
-    return {
-      isSuccess: true,
-      data: data.map((student) => this.filter(student)),
-      totalPages,
-    };
+    if (result.error) {
+      return {
+        isSuccess: false,
+        errors: result.error.details,
+      };
+    } else {
+      const maxPerPage = 10;
+      const currentPage = pageNumber;
+
+      const [data, count] = await (
+        await databaseProviders[0].useFactory()
+      )
+        .createQueryBuilder()
+        .select('user')
+        .from(User, 'user')
+        .where('user.courseEngagment IN (:courseEngagment)', {
+          courseEngagment: body.courseEngagment,
+        })
+        .andWhere('user.courseCompletion IN (:courseCompletion)', {
+          courseCompletion: body.courseCompletion,
+        })
+        .andWhere('user.projectDegree IN (:projectDegree)', {
+          projectDegree: body.projectDegree,
+        })
+        .andWhere('user.teamProjectDegree IN (:teamProjectDegree)', {
+          teamProjectDegree: body.teamProjectDegree,
+        })
+        .andWhere(
+          '(user.expectedTypeWork IN (:expectedTypeWork) OR user.expectedTypeWork is null)',
+          {
+            expectedTypeWork: body.expectedTypeWork,
+          },
+        )
+        .andWhere(
+          '(user.expectedContractType IN (:expectedContractType) OR user.expectedContractType is null)',
+          {
+            expectedContractType: body.expectedContractType,
+          },
+        )
+        .andWhere(
+          '(user.expectedSalary is null OR (user.expectedSalary >= :expectedSalaryMin AND  user.expectedSalary <= :expectedSalaryMax))',
+          {
+            expectedSalaryMin: body.expectedSalary[0],
+            expectedSalaryMax: body.expectedSalary[1],
+          },
+        )
+        .andWhere(
+          '(user.canTakeApprenticeship IN (:canTakeApprenticeship) OR user.canTakeApprenticeship is null)',
+          {
+            canTakeApprenticeship: body.canTakeApprenticeship,
+          },
+        )
+        .andWhere(
+          '(user.monthsOfCommercialExp >= (:monthsOfCommercialExp) OR user.monthsOfCommercialExp is null)',
+          {
+            monthsOfCommercialExp: body.monthsOfCommercialExp,
+          },
+        )
+        .skip(maxPerPage * (currentPage - 1))
+        .take(maxPerPage)
+        .getManyAndCount();
+
+      const totalPages = Math.ceil(count / maxPerPage);
+      return {
+        isSuccess: true,
+        data: data.map((student) => this.filter(student)),
+        totalPages,
+      };
+    }
   }
 }

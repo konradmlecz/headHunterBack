@@ -1,30 +1,43 @@
-import { expectedContractType, expectedTypeWork } from 'src/types/student';
-import { IsOptional } from 'class-validator';
+import { expectedTypeWork, expectedContractType } from 'src/types/student';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class FilterStudent {
+  @IsNotEmpty()
+  @IsArray()
+  @IsNumber({}, { each: true })
   @IsOptional()
+  @ArrayMaxSize(5)
   courseEngagment: number[] = [1, 2, 3, 4, 5];
-  // @IsOptional()
-  // @IsNumber()
-  // @Min(1)
-  // @Max(5)
+  @IsArray()
+  @IsNumber({}, { each: true })
   @IsOptional()
+  @ArrayMaxSize(5)
   courseCompletion: number[] = [1, 2, 3, 4, 5];
+  @IsArray()
+  @IsNumber({}, { each: true })
   @IsOptional()
-  // @IsNumber()
-  // @Min(1)
-  // @Max(5)
+  @ArrayMaxSize(5)
   @IsOptional()
   projectDegree: number[] = [1, 2, 3, 4, 5];
-  // @IsOptional()
-  // @IsNumber()
-  // @Min(1)
-  // @Max(5)
+  @IsArray()
+  @IsNumber({}, { each: true })
   @IsOptional()
+  @ArrayMaxSize(5)
   teamProjectDegree: number[] = [1, 2, 3, 4, 5];
   @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayMaxSize(5)
   expectedTypeWork: expectedTypeWork[] = [
-    null,
     expectedTypeWork.HEBRID,
     expectedTypeWork.ONSITE,
     expectedTypeWork.NOMETTER,
@@ -32,22 +45,27 @@ export class FilterStudent {
     expectedTypeWork.NOMETTER,
   ];
   @IsOptional()
-  // @IsString()
-  // @IsEnum(expectedTypeWork)
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayMaxSize(5)
   expectedContractType: expectedContractType[] = [
-    null,
     expectedContractType.B2B,
     expectedContractType.NO,
     expectedContractType.UOP,
     expectedContractType.UZ,
   ];
   @IsOptional()
-  // @IsNumber()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @ArrayMaxSize(2)
   expectedSalary: number[] = [0, 999999];
   @IsOptional()
-  // @IsBoolean()
+  @IsArray()
+  @IsBoolean({ each: true })
+  @ArrayMaxSize(2)
   canTakeApprenticeship: boolean[] = [true, false];
   @IsOptional()
-  // @IsNumber()
-  monthsOfCommercialExp: number = 0;
+  @IsNumber({}, { each: true })
+  @ArrayMaxSize(1)
+  monthsOfCommercialExp: number[] = [0];
 }
