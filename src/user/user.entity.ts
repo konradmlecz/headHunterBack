@@ -1,4 +1,3 @@
-import { expectedContractType, expectedTypeWork } from 'src/types/student';
 import {
   BaseEntity,
   Column,
@@ -8,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { StudentStatus, UserRole } from '../types/user';
+import { expectedContractType, expectedTypeWork } from 'src/types/student';
 
 @Entity()
 export class User extends BaseEntity {

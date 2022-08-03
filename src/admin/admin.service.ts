@@ -31,7 +31,7 @@ export class AdminService extends AuthService {
       Joi.object().keys({
         email: Joi.string().email().required(),
         courseCompletion: Joi.number().min(0).max(5).required(),
-        courseEngagement: Joi.number().min(0).max(5).required(),
+        courseEngagment: Joi.number().min(0).max(5).required(),
         projectDegree: Joi.number().min(0).max(5).required(),
         teamProjectDegree: Joi.number().min(0).max(5).required(),
         bonusProjectUrls: Joi.array().items(
