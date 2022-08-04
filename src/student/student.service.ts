@@ -304,6 +304,21 @@ export class StudentService {
       .orWhere('user.lastName LIKE :term', {
         term: `%${term}%`,
       })
+      .orWhere('user.expectedTypeWork LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.targetWorkCity LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.expectedContractType LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.canTakeApprenticeship LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.monthsOfCommercialExp LIKE :term', {
+        term: `%${term}%`,
+      })
       .skip(maxPerPage * (currentPage - 1))
       .take(maxPerPage)
       .getManyAndCount();
