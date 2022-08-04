@@ -96,4 +96,12 @@ export class StudentController {
   ): Promise<GetStudentsResponse> {
     return this.studentService.searchTermAvailable(term, pageNumber);
   }
+
+  @Get('/search-interview/:term/:pageNumber?')
+  searchTermInterview(
+    @Param('term') term: string,
+    @Param('pageNumber') pageNumber = 1,
+  ): Promise<GetStudentsResponse> {
+    return this.studentService.searchTermInterview(term, pageNumber);
+  }
 }

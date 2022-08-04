@@ -287,4 +287,33 @@ export class StudentService {
       totalPages,
     };
   }
+
+  async searchTermInterview(term: string, pageNumber: number) {
+    const maxPerPage = 10;
+    const currentPage = pageNumber;
+
+    const [data, count] = await (
+      await databaseProviders[0].useFactory()
+    )
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where('user.firstName LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.lastName LIKE :term', {
+        term: `%${term}%`,
+      })
+      .skip(maxPerPage * (currentPage - 1))
+      .take(maxPerPage)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(count / maxPerPage);
+
+    return {
+      isSuccess: true,
+      data: data,
+      totalPages,
+    };
+  }
 }
