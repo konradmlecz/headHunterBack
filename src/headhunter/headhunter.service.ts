@@ -43,6 +43,7 @@ export class HeadhunterService {
 
     foundStudent.status = StudentStatus.INTERVIEW;
     foundStudent.headHunter = hr;
+    foundStudent.addedToInterviewAt = new Date();
     await foundStudent.save();
 
     return {
@@ -60,6 +61,7 @@ export class HeadhunterService {
 
     foundStudent.status = StudentStatus.AVAILABLE;
     foundStudent.headHunter = null;
+    foundStudent.addedToInterviewAt = null;
     await foundStudent.save();
 
     return {
@@ -78,6 +80,7 @@ export class HeadhunterService {
       foundStudent.status = StudentStatus.EMPLOYED;
       foundStudent.isActive = false;
       foundStudent.currentTokenId = null;
+      foundStudent.addedToInterviewAt = null;
       await foundStudent.save();
 
       return {
