@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Catch, Inject, Injectable } from '@nestjs/common';
 import { MulterDiskUploadedFiles } from '../interfaces/files';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -11,6 +11,9 @@ import { StudentStatus, UserRole } from '../types/user';
 import { RegisterStudentDto } from '../user/dto/student-register.dto';
 import * as Joi from 'joi';
 import { HeadhunterDto } from '../headhunter/dto/headhunter.dto';
+import { TypeORMError } from 'typeorm';
+import { catchError } from 'rxjs';
+import { databaseProviders } from '../database.providers';
 
 @Injectable()
 export class AdminService extends AuthService {
@@ -46,14 +49,15 @@ export class AdminService extends AuthService {
 
     const result = await schema.validate(studentsData, { abortEarly: false });
 
+    if (result.error) {
+      await fs.unlink(path.join(storageDir(), 'student', student.filename));
+      return {
+        isSuccess: false,
+        errors: result.error.details,
+      };
+    }
     try {
-      if (result.error) {
-        await fs.unlink(path.join(storageDir(), 'student', student.filename));
-        return {
-          isSuccess: false,
-          errors: result.error.details,
-        };
-      } else {
+      await Promise.all(
         studentsData.map(async (student: RegisterStudentDto) => {
           const user = new User();
           user.email = student.email;
@@ -68,25 +72,31 @@ export class AdminService extends AuthService {
 
           await this.generateToken(user);
           await user.save();
+
           // await this.mailService.sendMail(
           //   user.email,
           //   `Head Hunter |MEGAK| - dokończ rejestracje!`,
           //   registerEmailTemplate(user.id, user.currentTokenId),
           // );
-        });
-        await fs.unlink(path.join(storageDir(), 'student', student.filename));
-        return { isSuccess: true };
-      }
+        }),
+      );
+      await fs.unlink(path.join(storageDir(), 'student', student.filename));
+      return { isSuccess: true };
     } catch (err) {
-      throw err;
       try {
         if (student) {
           await fs.unlink(path.join(storageDir(), 'student', student.filename));
         }
       } catch (err2) {
-        throw err2;
+        return {
+          isSuccess: false,
+          error: err2.message,
+        };
       }
-      throw err;
+      return {
+        isSuccess: false,
+        error: err.message,
+      };
     }
   }
 
