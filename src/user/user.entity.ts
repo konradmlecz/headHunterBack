@@ -45,12 +45,6 @@ export class User extends BaseEntity {
     nullable: true,
     default: null,
   })
-  fullName: string | null;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
   company: string | null;
 
   @Column({
@@ -152,43 +146,43 @@ export class User extends BaseEntity {
   })
   monthsOfCommercialExp: number | null;
 
-  @Column({
+  @Column('text', {
     nullable: true,
     default: null,
   })
   education: string | null;
 
-  @Column({
+  @Column('text', {
     nullable: true,
     default: null,
   })
   workExperience: string | null;
 
-  @Column({
+  @Column('text', {
     nullable: true,
     default: null,
   })
   courses: string | null;
 
-  @Column({
+  @Column('int', {
     nullable: true,
     default: null,
   })
   courseCompletion: number | null;
 
-  @Column({
+  @Column('int', {
     nullable: true,
     default: null,
   })
-  courseEngagment: number | null;
+  courseEngagement: number | null;
 
-  @Column({
+  @Column('int', {
     nullable: true,
     default: null,
   })
   projectDegree: number | null;
 
-  @Column({
+  @Column('int', {
     nullable: true,
     default: null,
   })
@@ -199,6 +193,12 @@ export class User extends BaseEntity {
     default: null,
   })
   bonusProjectUrls: string | null;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  addedToInterviewAt: Date | null;
 
   @ManyToOne((type) => User, (entity) => entity.interviewStudent)
   headHunter: User;

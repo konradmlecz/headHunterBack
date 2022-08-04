@@ -24,7 +24,7 @@ export class RegisterStudentDto {
   @IsNumber()
   @Min(0)
   @Max(5)
-  courseEngagment: number;
+  courseEngagement: number;
 
   @IsNumber()
   @Min(0)
