@@ -3,7 +3,7 @@ import { config } from './config/config';
 
 export const databaseProviders = [
   {
-    provide: ' Dynamic_Module',
+    provide: 'Dynamic_Module',
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',

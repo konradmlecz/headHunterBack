@@ -1,4 +1,3 @@
-
 export interface AddHeadHunterResponse {
   isSuccess: true | false;
 }
@@ -10,4 +9,3 @@ export type SetStudentInterviewResponse = {
 export type SetDisinterestResponse = {
   isSuccess: boolean;
 };
-

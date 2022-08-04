@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.entity';
 import {
   GetOneStudentResponse,
@@ -248,5 +248,87 @@ export class StudentService {
         totalPages,
       };
     }
+  }
+
+  async searchTermAvailable(term: string, pageNumber: number) {
+    const maxPerPage = 10;
+    const currentPage = pageNumber;
+
+    const [data, count] = await (
+      await databaseProviders[0].useFactory()
+    )
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where('user.expectedTypeWork LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.targetWorkCity LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.expectedContractType LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.canTakeApprenticeship LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.monthsOfCommercialExp LIKE :term', {
+        term: `%${term}%`,
+      })
+      .skip(maxPerPage * (currentPage - 1))
+      .take(maxPerPage)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(count / maxPerPage);
+
+    return {
+      isSuccess: true,
+      data: data,
+      totalPages,
+    };
+  }
+
+  async searchTermInterview(term: string, pageNumber: number) {
+    const maxPerPage = 10;
+    const currentPage = pageNumber;
+
+    const [data, count] = await (
+      await databaseProviders[0].useFactory()
+    )
+      .createQueryBuilder()
+      .select('user')
+      .from(User, 'user')
+      .where('user.firstName LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.lastName LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.expectedTypeWork LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.targetWorkCity LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.expectedContractType LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.canTakeApprenticeship LIKE :term', {
+        term: `%${term}%`,
+      })
+      .orWhere('user.monthsOfCommercialExp LIKE :term', {
+        term: `%${term}%`,
+      })
+      .skip(maxPerPage * (currentPage - 1))
+      .take(maxPerPage)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(count / maxPerPage);
+
+    return {
+      isSuccess: true,
+      data: data,
+      totalPages,
+    };
   }
 }
