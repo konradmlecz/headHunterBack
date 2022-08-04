@@ -4,7 +4,6 @@ import {
   Get,
   Inject,
   Param,
-  ParseArrayPipe,
   Patch,
   Post,
   UseGuards,
@@ -61,7 +60,7 @@ export class StudentController {
   async getStudentsForInterview(
     @UserObj() hr: User,
     @Param('pageNumber') pageNumber = 1,
-  ): Promise<GetStudentsResponse> {
+  ): Promise<any> {
     return this.studentService.getStudentsForInterview(hr, pageNumber);
   }
 
@@ -88,5 +87,13 @@ export class StudentController {
     @Param('pageNumber') pageNumber = 1,
   ): Promise<GetStudentsResponse | {}> {
     return this.studentService.setFilter(body, pageNumber);
+  }
+
+  @Get('/search-available/:term/:pageNumber?')
+  searchTermAvailable(
+    @Param('term') term: string,
+    @Param('pageNumber') pageNumber = 1,
+  ): Promise<GetStudentsResponse> {
+    return this.studentService.searchTermAvailable(term, pageNumber);
   }
 }
