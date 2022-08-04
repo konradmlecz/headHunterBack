@@ -8,7 +8,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class FilterStudent {
   @IsNotEmpty()
@@ -16,7 +15,7 @@ export class FilterStudent {
   @IsNumber({}, { each: true })
   @IsOptional()
   @ArrayMaxSize(5)
-  courseEngagment: number[] = [1, 2, 3, 4, 5];
+  courseEngagement: number[] = [1, 2, 3, 4, 5];
   @IsArray()
   @IsNumber({}, { each: true })
   @IsOptional()

@@ -19,7 +19,6 @@ export class StudentService {
       currentTokenId,
       isActive,
       role,
-      fullName,
       company,
       maxReservedStudents,
       headHunter,
@@ -147,7 +146,7 @@ export class StudentService {
 
   async setFilter(body: any, pageNumber: number) {
     const schema = Joi.object().keys({
-      courseEngagment: Joi.array().min(1).items(Joi.number().min(1).max(5)),
+      courseEngagement: Joi.array().min(1).items(Joi.number().min(1).max(5)),
       courseCompletion: Joi.array().min(1).items(Joi.number().min(1).max(5)),
       projectDegree: Joi.array().min(1).items(Joi.number().min(1).max(5)),
       teamProjectDegree: Joi.array().min(1).items(Joi.number().min(1).max(5)),
@@ -194,8 +193,8 @@ export class StudentService {
         .createQueryBuilder()
         .select('user')
         .from(User, 'user')
-        .where('user.courseEngagment IN (:courseEngagment)', {
-          courseEngagment: body.courseEngagment,
+        .where('user.courseEngagement IN (:courseEngagement)', {
+          courseEngagement: body.courseEngagement,
         })
         .andWhere('user.courseCompletion IN (:courseCompletion)', {
           courseCompletion: body.courseCompletion,

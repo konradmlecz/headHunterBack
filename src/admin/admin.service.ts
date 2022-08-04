@@ -1,4 +1,4 @@
-import { BadRequestException, Catch, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { MulterDiskUploadedFiles } from '../interfaces/files';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -11,9 +11,6 @@ import { StudentStatus, UserRole } from '../types/user';
 import { RegisterStudentDto } from '../user/dto/student-register.dto';
 import * as Joi from 'joi';
 import { HeadhunterDto } from '../headhunter/dto/headhunter.dto';
-import { TypeORMError } from 'typeorm';
-import { catchError } from 'rxjs';
-import { databaseProviders } from '../database.providers';
 
 @Injectable()
 export class AdminService extends AuthService {
@@ -34,7 +31,7 @@ export class AdminService extends AuthService {
       Joi.object().keys({
         email: Joi.string().email().required(),
         courseCompletion: Joi.number().min(0).max(5).required(),
-        courseEngagment: Joi.number().min(0).max(5).required(),
+        courseEngagement: Joi.number().min(0).max(5).required(),
         projectDegree: Joi.number().min(0).max(5).required(),
         teamProjectDegree: Joi.number().min(0).max(5).required(),
         bonusProjectUrls: Joi.array().items(
@@ -62,7 +59,7 @@ export class AdminService extends AuthService {
           const user = new User();
           user.email = student.email;
           user.courseCompletion = student.courseCompletion;
-          user.courseEngagment = student.courseEngagment;
+          user.courseEngagement = student.courseEngagement;
           user.projectDegree = student.projectDegree;
           user.teamProjectDegree = student.teamProjectDegree;
           user.bonusProjectUrls = JSON.stringify(student.bonusProjectUrls);
