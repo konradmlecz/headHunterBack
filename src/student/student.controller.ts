@@ -79,8 +79,8 @@ export class StudentController {
   }
 
   @Post('/set-filter/:pageNumber?')
-  //@UseGuards(AuthGuard('jwt'), UserRoleGuard)
-  //@Role(UserRole.HR)
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
   setFilter(
     @Body()
     body: FilterStudent,
@@ -90,6 +90,8 @@ export class StudentController {
   }
 
   @Get('/search-available/:term/:pageNumber?')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
   searchTermAvailable(
     @Param('term') term: string,
     @Param('pageNumber') pageNumber = 1,
@@ -98,6 +100,8 @@ export class StudentController {
   }
 
   @Get('/search-interview/:term/:pageNumber?')
+  @UseGuards(AuthGuard('jwt'), UserRoleGuard)
+  @Role(UserRole.HR)
   searchTermInterview(
     @Param('term') term: string,
     @Param('pageNumber') pageNumber = 1,
