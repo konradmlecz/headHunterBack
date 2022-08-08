@@ -87,12 +87,12 @@ export class AdminService extends AuthService {
       } catch (err2) {
         return {
           isSuccess: false,
-          error: err2.message,
+          errors: err2.message,
         };
       }
       return {
         isSuccess: false,
-        error: err.message,
+        errors: err.message,
       };
     }
   }
