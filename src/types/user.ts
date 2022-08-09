@@ -14,6 +14,10 @@ export type registerUserResponse = {
   isSuccess: true;
 };
 
+export type changePasswordResponse = {
+  isSuccess: true;
+};
+
 export interface BeforeSetPasswordResponse {
   email: string;
 }
