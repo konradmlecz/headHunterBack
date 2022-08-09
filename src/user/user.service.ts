@@ -3,6 +3,8 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { SetPassword } from './dto/set-password.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { changePasswordResponse } from '../types/user';
 
 @Injectable()
 export class UserService {
@@ -58,16 +60,24 @@ export class UserService {
     }
   }
 
-  // async beforeSetPassword(id: string) {
-  //   const foundStudent = await User.findOne({
-  //     where: {
-  //       id: id,
-  //     },
-  //   });
-  //
-  //   return {
-  //     id: foundStudent.id,
-  //     email: foundStudent.email,
-  //   };
-  // }
+  async changePassword(
+    user: User,
+    { newPwd }: ChangePasswordDto,
+  ): Promise<changePasswordResponse> {
+    const foundStudent = await User.findOne({
+      where: {
+        id: user.id,
+      },
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPwd = await bcrypt.hash(newPwd, salt);
+
+    foundStudent.pwd = hashedPwd;
+    await foundStudent.save();
+
+    return {
+      isSuccess: true,
+    };
+  }
 }
