@@ -16,24 +16,27 @@ import { SetPassword } from './dto/set-password.dto';
 export class UserController {
   constructor(@Inject(UserService) private userService: UserService) {}
 
-  @Get('/register/:id/:token')
+  @Get('/check/:id/:token')
   async register(
     @Param('id') id: string,
     @Param('token') token: string,
     @Res() res: Response,
   ) {
-    await this.userService.register(id, token, res);
+    await this.userService.check(id, token, res);
   }
 
-  @Get('/setpassword/:id')
-  async beforeSetPassword(
-    @Param('id') id: string,
-  ): Promise<BeforeSetPasswordResponse> {
-    return this.userService.beforeSetPassword(id);
-  }
+  // @Get('/setpassword/:id')
+  // async beforeSetPassword(
+  //   @Param('id') id: string,
+  // ): Promise<BeforeSetPasswordResponse> {
+  //   return this.userService.beforeSetPassword(id);
+  // }
 
   @Post('/setpassword')
-  async setPassword(@Body() req: SetPassword): Promise<any> {
-    return this.userService.setPassword(req);
+  async setPassword(
+    @Body() req: SetPassword,
+    @Res() res: Response,
+  ): Promise<any> {
+    return this.userService.setPassword(req, res);
   }
 }

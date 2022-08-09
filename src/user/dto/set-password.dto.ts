@@ -8,4 +8,8 @@ export class SetPassword {
   @IsString()
   @IsNotEmpty()
   pwd: string;
+
+  @IsString()
+  @IsNotEmpty()
+  token: string;
 }

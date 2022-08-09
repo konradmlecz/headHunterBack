@@ -6,55 +6,68 @@ import { SetPassword } from './dto/set-password.dto';
 
 @Injectable()
 export class UserService {
-  async register(id: string, token: string, res: Response) {
-    const student = await User.findOneOrFail({
-      where: {
-        id,
-        currentTokenId: token,
-      },
-    });
-
-    if (!student) {
-      res.status(401).json({
-        message: 'Not active link',
+  async check(id: string, token: string, res: Response) {
+    try {
+      await User.findOneOrFail({
+        where: {
+          id,
+          currentTokenId: token,
+          pwd: null,
+        },
       });
-    } else {
-      console.log();
-      res.redirect(`http://localhost:3001/user/setpassword/${id}`);
+      res.json({
+        isSuccess: true,
+        message: '',
+      });
+    } catch (error) {
+      res.status(401).json({
+        isSuccess: false,
+        message: 'The link is no longer active!',
+      });
     }
   }
 
-  async setPassword({ id, pwd }: SetPassword) {
-    const foundStudent = await User.findOne({
-      where: {
-        id,
-      },
-    });
+  async setPassword({ id, pwd, token }: SetPassword, res: Response) {
+    try {
+      const user = await User.findOneOrFail({
+        where: {
+          id,
+          currentTokenId: token,
+          pwd: null,
+        },
+      });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPwd = await bcrypt.hash(pwd, salt);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPwd = await bcrypt.hash(pwd, salt);
 
-    foundStudent.currentTokenId = null;
-    foundStudent.pwd = hashedPwd;
-    foundStudent.isActive = true;
+      user.currentTokenId = null;
+      user.pwd = hashedPwd;
+      user.isActive = true;
 
-    await foundStudent.save();
+      await user.save();
 
-    return {
-      isSuccess: true,
-    };
+      res.json({
+        isSuccess: true,
+      });
+    } catch (error) {
+      res.status(401).json({
+        isSuccess: false,
+        message:
+          'Setting password is impossible at this moment, contact with Administrator',
+      });
+    }
   }
 
-  async beforeSetPassword(id: string) {
-    const foundStudent = await User.findOne({
-      where: {
-        id: id,
-      },
-    });
-
-    return {
-      id: foundStudent.id,
-      email: foundStudent.email,
-    };
-  }
+  // async beforeSetPassword(id: string) {
+  //   const foundStudent = await User.findOne({
+  //     where: {
+  //       id: id,
+  //     },
+  //   });
+  //
+  //   return {
+  //     id: foundStudent.id,
+  //     email: foundStudent.email,
+  //   };
+  // }
 }
