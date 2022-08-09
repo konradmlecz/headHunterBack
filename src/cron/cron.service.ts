@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { User } from '../user/user.entity';
 import { StudentStatus, UserRole } from '../types/user';
 
 @Injectable()
 export class CronService {
-  @Cron('0 */12 * * *')
+  @Cron(CronExpression.EVERY_12_HOURS)
   async updateStatus() {
     const tenDays = 1000 * 60 * 60 * 24 * 10;
 
@@ -28,6 +28,7 @@ export class CronService {
           });
           foundStudent.status = StudentStatus.AVAILABLE;
           foundStudent.headHunter = null;
+          foundStudent.addedToInterviewAt = null;
           await foundStudent.save();
         });
     }
