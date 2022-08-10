@@ -46,18 +46,16 @@ export class HeadhunterService {
     };
   }
 
-  async setDisinterest(id: string): Promise<SetDisinterestResponse> {
-    const foundStudent = await User.findOne({
-      relations: ['headHunter'],
+  async setDisinterest(hr: User, id: string): Promise<SetDisinterestResponse> {
+    const foundInterview = await Interview.findOne({
+      relations: ['headHunter', 'interviewStudent'],
       where: {
-        id,
+        headHunter: { id: hr.id },
+        interviewStudent: { id },
       },
     });
 
-    foundStudent.status = StudentStatus.AVAILABLE;
-    foundStudent.headHunter = null;
-    foundStudent.addedToInterviewAt = null;
-    await foundStudent.save();
+    await foundInterview.remove();
 
     return {
       isSuccess: true,
