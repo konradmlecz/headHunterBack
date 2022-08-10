@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { User } from '../user/user.entity';
-import { StudentStatus, UserRole } from '../types/user';
+import { Interview } from '../user/interview.entity';
 
 @Injectable()
 export class CronService {
@@ -9,27 +8,16 @@ export class CronService {
   async updateStatus() {
     const tenDays = 1000 * 60 * 60 * 24 * 10;
 
-    const studentsToInterview = await User.find({
-      where: {
-        role: UserRole.STUDENT,
-        isActive: true,
-        status: StudentStatus.INTERVIEW,
-      },
-    });
+    const interviews = await Interview.find();
 
-    if (studentsToInterview.length !== 0) {
-      studentsToInterview
-        .filter(
-          (student) => +student.addedToInterviewAt + tenDays < +new Date(),
-        )
-        .map(async (student) => {
-          const foundStudent = await User.findOne({
-            where: { id: student.id },
+    if (interviews.length !== 0) {
+      interviews
+        .filter((interview) => +interview.createdAt + tenDays < +new Date())
+        .map(async (interview) => {
+          const foundInterview = await Interview.findOne({
+            where: { id: interview.id },
           });
-          foundStudent.status = StudentStatus.AVAILABLE;
-          foundStudent.headHunter = null;
-          foundStudent.addedToInterviewAt = null;
-          await foundStudent.save();
+          await foundInterview.remove();
         });
     }
   }

@@ -32,15 +32,19 @@ export class HeadhunterController {
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
   async setDisinterest(
+    @UserObj() hr: User,
     @Param('id') id: string,
   ): Promise<SetDisinterestResponse> {
-    return this.headhunterService.setDisinterest(id);
+    return this.headhunterService.setDisinterest(hr, id);
   }
 
   @Patch('/employed/:id')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
-  async setEmployed(@Param('id') id: string): Promise<UpdateStudentResponse> {
-    return this.headhunterService.setEmployed(id);
+  async setEmployed(
+    @UserObj() hr: User,
+    @Param('id') id: string,
+  ): Promise<UpdateStudentResponse> {
+    return this.headhunterService.setEmployed(hr, id);
   }
 }

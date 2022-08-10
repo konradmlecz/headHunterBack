@@ -6,6 +6,7 @@ import {
   SetStudentInterviewResponse,
 } from '../types/headhunter';
 import { UpdateStudentResponse } from '../types/student';
+import { Interview } from '../user/interview.entity';
 
 @Injectable()
 export class HeadhunterService {
@@ -13,7 +14,7 @@ export class HeadhunterService {
     hr: User,
     id: string,
   ): Promise<SetStudentInterviewResponse> {
-    const reservedStudents = await User.count({
+    const reservedStudents = await Interview.count({
       relations: ['headHunter'],
       where: {
         headHunter: { id: hr.id },
@@ -27,31 +28,20 @@ export class HeadhunterService {
       );
     }
 
-    const foundStudent = await User.findOne({
-      relations: ['headHunter'],
+    const foundStudentToInterview = await Interview.findOne({
+      relations: ['headHunter', 'interviewStudent'],
       where: {
-        id,
+        headHunter: { id: hr.id },
+        interviewStudent: { id },
       },
     });
 
-    if (foundStudent.status !== StudentStatus.AVAILABLE) {
-      throw new HttpException(
-        'Student must have available status!',
-        HttpStatus.BAD_REQUEST,
-      );
+    if (foundStudentToInterview) {
+      return {
+        isSuccess: false,
+      };
     }
 
-    foundStudent.status = StudentStatus.INTERVIEW;
-    foundStudent.headHunter = hr;
-    foundStudent.addedToInterviewAt = new Date();
-    await foundStudent.save();
-
-    return {
-      isSuccess: true,
-    };
-  }
-
-  async setDisinterest(id: string): Promise<SetDisinterestResponse> {
     const foundStudent = await User.findOne({
       relations: ['headHunter'],
       where: {
@@ -59,28 +49,53 @@ export class HeadhunterService {
       },
     });
 
-    foundStudent.status = StudentStatus.AVAILABLE;
-    foundStudent.headHunter = null;
-    foundStudent.addedToInterviewAt = null;
-    await foundStudent.save();
+    const newInterview = new Interview();
+    newInterview.interviewStudent = foundStudent;
+    newInterview.headHunter = hr;
+
+    await newInterview.save();
 
     return {
       isSuccess: true,
     };
   }
 
-  async setEmployed(id: string): Promise<UpdateStudentResponse> {
+  async setDisinterest(hr: User, id: string): Promise<SetDisinterestResponse> {
+    const foundInterview = await Interview.findOne({
+      relations: ['headHunter', 'interviewStudent'],
+      where: {
+        headHunter: { id: hr.id },
+        interviewStudent: { id },
+      },
+    });
+
+    await foundInterview.remove();
+
+    return {
+      isSuccess: true,
+    };
+  }
+
+  async setEmployed(hr: User, id: string): Promise<UpdateStudentResponse> {
     try {
       const foundStudent = await User.findOne({
         where: {
           id,
         },
       });
+      const foundInterview = await Interview.findOne({
+        relations: ['headHunter', 'interviewStudent'],
+        where: {
+          headHunter: { id: hr.id },
+          interviewStudent: { id },
+        },
+      });
+
+      await foundInterview.remove();
 
       foundStudent.status = StudentStatus.EMPLOYED;
       foundStudent.isActive = false;
       foundStudent.currentTokenId = null;
-      foundStudent.addedToInterviewAt = null;
       await foundStudent.save();
 
       return {

@@ -10,6 +10,7 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentStatus, UserRole } from '../types/user';
 import { databaseProviders } from '../database.providers';
 import * as Joi from 'joi';
+import { Interview } from '../user/interview.entity';
 
 @Injectable()
 export class StudentService {
@@ -84,7 +85,6 @@ export class StudentService {
       where: {
         role: UserRole.STUDENT,
         isActive: true,
-        status: StudentStatus.AVAILABLE,
       },
       skip: maxPerPage * (currentPage - 1),
       take: maxPerPage,
@@ -106,13 +106,11 @@ export class StudentService {
     const maxPerPage = 10;
     const currentPage = Number(pageNumber);
 
-    const [data, pagesCount] = await User.findAndCount({
-      relations: ['headHunter'],
+    const [data, pagesCount] = await Interview.findAndCount({
+      relations: ['headHunter', 'interviewStudent'],
       where: {
-        role: UserRole.STUDENT,
-        isActive: true,
-        status: StudentStatus.INTERVIEW,
         headHunter: { id: hr.id },
+        interviewStudent: { isActive: true, role: UserRole.STUDENT },
       },
       skip: maxPerPage * (currentPage - 1),
       take: maxPerPage,
@@ -122,7 +120,7 @@ export class StudentService {
 
     return {
       isSuccess: true,
-      data: data.map((student) => this.filter(student)),
+      data: data.map((user) => this.filter(user.interviewStudent)),
       totalPages,
     };
   }
@@ -133,6 +131,15 @@ export class StudentService {
         id: student.id,
       },
     });
+
+    const foundInterview = await Interview.findOne({
+      relations: ['interviewStudent'],
+      where: {
+        interviewStudent: { id: student.id },
+      },
+    });
+
+    foundInterview && foundInterview.remove();
 
     foundStudent.status = StudentStatus.EMPLOYED;
     foundStudent.isActive = false;
