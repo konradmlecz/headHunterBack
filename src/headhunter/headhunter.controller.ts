@@ -41,7 +41,10 @@ export class HeadhunterController {
   @Patch('/employed/:id')
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
-  async setEmployed(@Param('id') id: string): Promise<UpdateStudentResponse> {
-    return this.headhunterService.setEmployed(id);
+  async setEmployed(
+    @UserObj() hr: User,
+    @Param('id') id: string,
+  ): Promise<UpdateStudentResponse> {
+    return this.headhunterService.setEmployed(hr, id);
   }
 }

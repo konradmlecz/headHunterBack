@@ -62,18 +62,26 @@ export class HeadhunterService {
     };
   }
 
-  async setEmployed(id: string): Promise<UpdateStudentResponse> {
+  async setEmployed(hr: User, id: string): Promise<UpdateStudentResponse> {
     try {
       const foundStudent = await User.findOne({
         where: {
           id,
         },
       });
+      const foundInterview = await Interview.findOne({
+        relations: ['headHunter', 'interviewStudent'],
+        where: {
+          headHunter: { id: hr.id },
+          interviewStudent: { id },
+        },
+      });
+
+      await foundInterview.remove();
 
       foundStudent.status = StudentStatus.EMPLOYED;
       foundStudent.isActive = false;
       foundStudent.currentTokenId = null;
-      foundStudent.addedToInterviewAt = null;
       await foundStudent.save();
 
       return {
