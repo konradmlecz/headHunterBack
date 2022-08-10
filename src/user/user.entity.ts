@@ -194,12 +194,6 @@ export class User extends BaseEntity {
   })
   bonusProjectUrls: string | null;
 
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  addedToInterviewAt: Date | null;
-
   @OneToMany((type) => Interview, (entity) => entity.interviewStudent)
   interviewStudent: User[];
 
