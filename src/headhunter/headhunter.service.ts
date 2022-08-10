@@ -42,7 +42,7 @@ export class HeadhunterService {
     }
 
     foundStudent.status = StudentStatus.INTERVIEW;
-    foundStudent.headHunter = hr;
+    // foundStudent.headHunter = hr;
     foundStudent.addedToInterviewAt = new Date();
     await foundStudent.save();
 

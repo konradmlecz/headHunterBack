@@ -2,12 +2,12 @@ import {
   BaseEntity,
   Column,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { StudentStatus, UserRole } from '../types/user';
 import { expectedContractType, expectedTypeWork } from 'src/types/student';
+import { Interview } from './interview.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -200,9 +200,9 @@ export class User extends BaseEntity {
   })
   addedToInterviewAt: Date | null;
 
-  @ManyToOne((type) => User, (entity) => entity.interviewStudent)
-  headHunter: User;
-
-  @OneToMany((type) => User, (entity) => entity.headHunter)
+  @OneToMany((type) => Interview, (entity) => entity.interviewStudent)
   interviewStudent: User[];
+
+  @OneToMany((type) => Interview, (entity) => entity.headHunter)
+  headHunter: User[];
 }
