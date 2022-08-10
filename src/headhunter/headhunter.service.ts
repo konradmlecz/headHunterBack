@@ -28,6 +28,20 @@ export class HeadhunterService {
       );
     }
 
+    const foundStudentToInterview = await Interview.findOne({
+      relations: ['headHunter', 'interviewStudent'],
+      where: {
+        headHunter: { id: hr.id },
+        interviewStudent: { id },
+      },
+    });
+
+    if (foundStudentToInterview) {
+      return {
+        isSuccess: false,
+      };
+    }
+
     const foundStudent = await User.findOne({
       relations: ['headHunter'],
       where: {
