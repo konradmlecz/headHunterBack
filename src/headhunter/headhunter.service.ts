@@ -6,6 +6,7 @@ import {
   SetStudentInterviewResponse,
 } from '../types/headhunter';
 import { UpdateStudentResponse } from '../types/student';
+import { Interview } from '../user/interview.entity';
 
 @Injectable()
 export class HeadhunterService {
@@ -13,7 +14,7 @@ export class HeadhunterService {
     hr: User,
     id: string,
   ): Promise<SetStudentInterviewResponse> {
-    const reservedStudents = await User.count({
+    const reservedStudents = await Interview.count({
       relations: ['headHunter'],
       where: {
         headHunter: { id: hr.id },
@@ -34,17 +35,11 @@ export class HeadhunterService {
       },
     });
 
-    if (foundStudent.status !== StudentStatus.AVAILABLE) {
-      throw new HttpException(
-        'Student must have available status!',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const newInterview = new Interview();
+    newInterview.interviewStudent = foundStudent;
+    newInterview.headHunter = hr;
 
-    foundStudent.status = StudentStatus.INTERVIEW;
-    // foundStudent.headHunter = hr;
-    foundStudent.addedToInterviewAt = new Date();
-    await foundStudent.save();
+    await newInterview.save();
 
     return {
       isSuccess: true,
