@@ -85,7 +85,6 @@ export class StudentService {
       where: {
         role: UserRole.STUDENT,
         isActive: true,
-        // status: StudentStatus.AVAILABLE,
       },
       skip: maxPerPage * (currentPage - 1),
       take: maxPerPage,
@@ -117,18 +116,6 @@ export class StudentService {
       take: maxPerPage,
     });
 
-    // const [data, pagesCount] = await User.findAndCount({
-    //   relations: ['headHunter'],
-    //   where: {
-    //     role: UserRole.STUDENT,
-    //     isActive: true,
-    //     // status: StudentStatus.INTERVIEW,
-    //     headHunter: { id: hr.id },
-    //   },
-    //   skip: maxPerPage * (currentPage - 1),
-    //   take: maxPerPage,
-    // });
-
     const totalPages = Math.ceil(pagesCount / maxPerPage);
 
     return {
@@ -144,6 +131,15 @@ export class StudentService {
         id: student.id,
       },
     });
+
+    const foundInterview = await Interview.findOne({
+      relations: ['interviewStudent'],
+      where: {
+        interviewStudent: { id: student.id },
+      },
+    });
+
+    foundInterview && foundInterview.remove();
 
     foundStudent.status = StudentStatus.EMPLOYED;
     foundStudent.isActive = false;
