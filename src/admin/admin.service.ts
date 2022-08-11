@@ -70,11 +70,11 @@ export class AdminService extends AuthService {
           await this.generateToken(user);
           await user.save();
 
-          // await this.mailService.sendMail(
-          //   user.email,
-          //   `Head Hunter |MEGAK| - dokończ rejestracje!`,
-          //   registerEmailTemplate(user.id, user.currentTokenId),
-          // );
+          await this.mailService.sendMail(
+            user.email,
+            `Head Hunter |MEGAK| - dokończ rejestracje!`,
+            registerEmailTemplate(user.id, user.currentTokenId),
+          );
         }),
       );
       await fs.unlink(path.join(storageDir(), 'student', student.filename));

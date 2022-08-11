@@ -243,6 +243,10 @@ export class StudentService {
             monthsOfCommercialExp: body.monthsOfCommercialExp,
           },
         )
+        .andWhere('(user.isActive = 1)')
+        .andWhere('(user.role LIKE :term)', {
+          term: UserRole.STUDENT,
+        })
         .skip(maxPerPage * (currentPage - 1))
         .take(maxPerPage)
         .getManyAndCount();

@@ -33,13 +33,6 @@ export class UserController {
     await this.userService.check(id, token, res);
   }
 
-  // @Get('/setpassword/:id')
-  // async beforeSetPassword(
-  //   @Param('id') id: string,
-  // ): Promise<BeforeSetPasswordResponse> {
-  //   return this.userService.beforeSetPassword(id);
-  // }
-
   @Post('/setpassword')
   async setPassword(
     @Body() req: SetPassword,
@@ -47,6 +40,13 @@ export class UserController {
   ): Promise<any> {
     return this.userService.setPassword(req, res);
   }
+
+  // @Get('/setpassword/:id')
+  // async beforeSetPassword(
+  //   @Param('id') id: string,
+  // ): Promise<BeforeSetPasswordResponse> {
+  //   return this.userService.beforeSetPassword(id);
+  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/change-password')
