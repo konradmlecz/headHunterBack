@@ -10,14 +10,6 @@ export enum StudentStatus {
   EMPLOYED = 'employed',
 }
 
-export type registerUserResponse = {
-  isSuccess: true;
-};
-
 export type changePasswordResponse = {
   isSuccess: true;
 };
-
-export interface BeforeSetPasswordResponse {
-  email: string;
-}

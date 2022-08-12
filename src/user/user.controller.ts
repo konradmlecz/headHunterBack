@@ -9,10 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {
-  BeforeSetPasswordResponse,
-  changePasswordResponse,
-} from '../types/user';
+import { changePasswordResponse } from '../types/user';
 import { Response } from 'express';
 import { SetPassword } from './dto/set-password.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -40,13 +37,6 @@ export class UserController {
   ): Promise<any> {
     return this.userService.setPassword(req, res);
   }
-
-  // @Get('/setpassword/:id')
-  // async beforeSetPassword(
-  //   @Param('id') id: string,
-  // ): Promise<BeforeSetPasswordResponse> {
-  //   return this.userService.beforeSetPassword(id);
-  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/change-password')

@@ -57,8 +57,7 @@ export class AuthService {
 
         return res
           .cookie('jwt', token.accessToken, {
-            secure: false,
-            domain: 'localhost',
+            secure: true,
             httpOnly: true,
           })
           .json({
@@ -80,8 +79,7 @@ export class AuthService {
       user.currentTokenId = null;
       await user.save();
       res.clearCookie('jwt', {
-        secure: false,
-        domain: 'localhost',
+        secure: true,
         httpOnly: true,
       });
       return res.json({ isSuccess: true });
