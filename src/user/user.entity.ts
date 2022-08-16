@@ -72,7 +72,7 @@ export class User extends BaseEntity {
     nullable: true,
     default: null,
   })
-  phone: number | null;
+  phone: string | null;
 
   @Column({
     nullable: true,

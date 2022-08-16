@@ -6,11 +6,11 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
+  IsPhoneNumber,
   IsString,
   Length,
   Min,
 } from 'class-validator';
-import { IsNull } from 'typeorm';
 
 export class UpdateStudentDto {
   @IsEmail()
@@ -19,8 +19,8 @@ export class UpdateStudentDto {
   email: string;
 
   @IsOptional()
-  @IsInt()
-  phone: number;
+  @IsPhoneNumber('PL')
+  phone: string;
 
   @IsString()
   @IsNotEmpty()
