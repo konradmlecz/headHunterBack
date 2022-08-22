@@ -1,4 +1,4 @@
-# Mega K Head Hunter <img src="./images/megaK_logo.png" height="80">
+# Mega K Head Hunter 1.0.0 <img src="./images/megaK_logo.png" height="80">
 
 Live demo [_here_](https://headhunter-g3.networkmanager.pl/).
 
