@@ -1,4 +1,4 @@
-# Mega K Head Hunter
+# Mega K Head Hunter <img src="./images/megaK_logo.png" height="80">
 
 Live demo [_here_](https://headhunter-g3.networkmanager.pl/).
 
@@ -77,14 +77,4 @@ $ npm start
 ```
 
 ## Project Status
-Project is: _in progress_
-
-
-## Room for Improvement
-
-
-Room for improvement:
--
-
-To do:
--
+Project is: _complete_
