@@ -44,11 +44,11 @@ The system works only after registration/log-in. It is not possible to access an
 
 The following system roles will be in the system:
 
-#### ADMIN
+> #### ADMIN
 - ADD HEADHUNTER - create new headhunter with email confirmation using nodemailer
 - IMPORT STUDENTS - import list of students from a JSON file and create new students with email confirmation using nodemailer 
 
-#### HEADHUNTER
+> #### HEADHUNTER
 - SET PASSWORD - set the password after click on the registration link from the email
 - GET ALL STUDENTS - display of all active students
 - SET TO INTERVIEW - add student to interview list
@@ -59,7 +59,7 @@ The following system roles will be in the system:
 - SET EMPLOYED - set the student's status as employed
 - SET DISINTEREST - remove student from the interview list
 
-#### STUDENT
+> #### STUDENT
 - SET PASSWORD - set the password after click on the registration link from the email
 - EDIT STUDENT PROFILE - CRUD for student profile
 - SET EMPLOYED - set the student status as employed
