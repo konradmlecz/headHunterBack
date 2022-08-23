@@ -9,8 +9,9 @@ Link to frontend repository [_here_](https://github.com/konradmlecz/headHunterFr
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Setup](#setup)
+* [Usage](#usage)
 * [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
+
 
 
 ## General Information
@@ -77,7 +78,7 @@ $ npm start
 ```
 
 ## Usage
-Login as admin: \
+###Login as admin: 
 E-mail: admin@admin.pl \
 Password: 1234
 
@@ -109,6 +110,13 @@ File template:
 - Admin can manually add new Headhunter. \
 In order to be active on the platform, a student must click the activation link on the email and set a password. 
 
+###Headhunter test login:
+E-mail: hr@hr.pl \
+Password: 1234
+
+###Student test login:
+E-mail: student@test.pl \
+Password: 1234
 
 ## Project Status
 Project is: _complete_
