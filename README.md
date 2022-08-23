@@ -1,8 +1,8 @@
 # Mega K Head Hunter 1.0.0 <img src="./images/megaK_logo.png" height="80">
 
-Live demo [_here_](https://headhunter-g3.networkmanager.pl/).
+> #### Live demo [_here_](https://headhunter-g3.networkmanager.pl/).
 
-Link to frontend repository [_here_](https://github.com/konradmlecz/headHunterFront).
+> #### Link to frontend repository [_here_](https://github.com/konradmlecz/headHunterFront).
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -11,7 +11,6 @@ Link to frontend repository [_here_](https://github.com/konradmlecz/headHunterFr
 * [Setup](#setup)
 * [Usage](#usage)
 * [Project Status](#project-status)
-
 
 
 ## General Information
