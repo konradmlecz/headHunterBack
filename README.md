@@ -78,7 +78,7 @@ $ npm start
 ```
 
 ## Usage
-###Login as admin: 
+### Login as admin: 
 E-mail: admin@admin.pl \
 Password: 1234
 
@@ -110,11 +110,11 @@ File template:
 - Admin can manually add new Headhunter. \
 In order to be active on the platform, a student must click the activation link on the email and set a password. 
 
-###Headhunter test login:
+### Headhunter test login:
 E-mail: hr@hr.pl \
 Password: 1234
 
-###Student test login:
+### Student test login:
 E-mail: student@test.pl \
 Password: 1234
 
