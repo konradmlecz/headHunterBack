@@ -76,5 +76,39 @@ $ npm install
 $ npm start
 ```
 
+## Usage
+Login as admin: \
+E-mail: admin@admin.pl \
+Password: 1234
+
+- Admin can import Students form JSON file. \
+In order to be active on the platform, a student must click the activation link on the email and set a password. \
+File template:
+
+```json
+[
+  {
+    "email": "test1@gmail.com",
+    "courseCompletion": 5,
+    "courseEngagement": 5,
+    "projectDegree": 5,
+    "teamProjectDegree": 5,
+    "bonusProjectUrls": ["https://github.com/konradmlecz/headHunterFront","https://github.com/konradmlecz/headHunterBack"]
+  },
+  {
+    "email": "test2@test.com",
+    "courseCompletion": 2,
+    "courseEngagement": 2,
+    "projectDegree": 2,
+    "teamProjectDegree": 2,
+    "bonusProjectUrls": ["https://github.com/konradmlecz/headHunterFront","https://github.com/konradmlecz/headHunterBack"]
+  }
+]
+```
+
+- Admin can manually add new Headhunter. \
+In order to be active on the platform, a student must click the activation link on the email and set a password. 
+
+
 ## Project Status
 Project is: _complete_
