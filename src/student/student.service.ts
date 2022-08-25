@@ -270,21 +270,41 @@ export class StudentService {
       .createQueryBuilder()
       .select('user')
       .from(User, 'user')
-      .where('user.expectedTypeWork LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.targetWorkCity LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.expectedContractType LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.canTakeApprenticeship LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.monthsOfCommercialExp LIKE :term', {
-        term: `%${term}%`,
-      })
+      .where(
+        'user.expectedTypeWork LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.targetWorkCity LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.expectedContractType LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.canTakeApprenticeship LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.monthsOfCommercialExp LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
       .skip(maxPerPage * (currentPage - 1))
       .take(maxPerPage)
       .getManyAndCount();
@@ -298,7 +318,7 @@ export class StudentService {
     };
   }
 
-  async searchTermInterview(term: string, pageNumber: number) {
+  async searchTermInterview(hr: User, term: string, pageNumber: number) {
     const maxPerPage = 10;
     const currentPage = pageNumber;
 
@@ -308,27 +328,57 @@ export class StudentService {
       .createQueryBuilder()
       .select('user')
       .from(User, 'user')
-      .where('user.firstName LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.lastName LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.expectedTypeWork LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.targetWorkCity LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.expectedContractType LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.canTakeApprenticeship LIKE :term', {
-        term: `%${term}%`,
-      })
-      .orWhere('user.monthsOfCommercialExp LIKE :term', {
-        term: `%${term}%`,
-      })
+      .leftJoinAndSelect('user.headHunter', 'headHunter')
+      .where(
+        'user.firstName LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND headHunter.id = :id',
+        {
+          term: `%${term}%`,
+          role: 'student',
+          id: `${hr.id}`,
+        },
+      )
+      .orWhere(
+        'user.lastName LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.expectedTypeWork LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.targetWorkCity LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.expectedContractType LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.canTakeApprenticeship LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
+      .orWhere(
+        'user.monthsOfCommercialExp LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        {
+          term: `%${term}%`,
+          role: `student`,
+        },
+      )
       .skip(maxPerPage * (currentPage - 1))
       .take(maxPerPage)
       .getManyAndCount();

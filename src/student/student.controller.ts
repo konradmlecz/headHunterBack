@@ -85,7 +85,7 @@ export class StudentController {
     @Body()
     body: FilterStudent,
     @Param('pageNumber') pageNumber = 1,
-  ): Promise<GetStudentsResponse | {}> {
+  ): Promise<GetStudentsResponse | any> {
     return this.studentService.setFilter(body, pageNumber);
   }
 
@@ -103,9 +103,10 @@ export class StudentController {
   @UseGuards(AuthGuard('jwt'), UserRoleGuard)
   @Role(UserRole.HR)
   searchTermInterview(
+    @UserObj() hr: User,
     @Param('term') term: string,
     @Param('pageNumber') pageNumber = 1,
   ): Promise<GetStudentsResponse> {
-    return this.studentService.searchTermInterview(term, pageNumber);
+    return this.studentService.searchTermInterview(hr, term, pageNumber);
   }
 }
