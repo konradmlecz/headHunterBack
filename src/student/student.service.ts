@@ -322,61 +322,72 @@ export class StudentService {
     const maxPerPage = 10;
     const currentPage = pageNumber;
 
+    console.log(hr.id);
     const [data, count] = await (
       await databaseProviders[0].useFactory()
     )
       .createQueryBuilder()
       .select('user')
       .from(User, 'user')
-      .leftJoinAndSelect('user.headHunter', 'headHunter')
+      .leftJoinAndSelect(
+        Interview,
+        'interview',
+        'interview.interviewStudent = user.id ',
+      )
       .where(
-        'user.firstName LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND headHunter.id = :id',
+        'user.firstName LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
-          role: 'student',
+          role: `%${UserRole.STUDENT}%`,
           id: `${hr.id}`,
         },
       )
       .orWhere(
-        'user.lastName LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        'user.lastName LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
           role: `student`,
+          id: `${hr.id}`,
         },
       )
       .orWhere(
-        'user.expectedTypeWork LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        'user.expectedTypeWork LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
           role: `student`,
+          id: `${hr.id}`,
         },
       )
       .orWhere(
-        'user.targetWorkCity LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        'user.targetWorkCity LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
           role: `student`,
+          id: `${hr.id}`,
         },
       )
       .orWhere(
-        'user.expectedContractType LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        'user.expectedContractType LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
           role: `student`,
+          id: `${hr.id}`,
         },
       )
       .orWhere(
-        'user.canTakeApprenticeship LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        'user.canTakeApprenticeship LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
           role: `student`,
+          id: `${hr.id}`,
         },
       )
       .orWhere(
-        'user.monthsOfCommercialExp LIKE :term AND user.isActive = 1 AND user.role LIKE :role',
+        'user.monthsOfCommercialExp LIKE :term AND user.isActive = 1 AND user.role LIKE :role AND interview.headHunter = :id ',
         {
           term: `%${term}%`,
           role: `student`,
+          id: `${hr.id}`,
         },
       )
       .skip(maxPerPage * (currentPage - 1))
