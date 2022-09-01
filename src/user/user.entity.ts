@@ -195,8 +195,8 @@ export class User extends BaseEntity {
   bonusProjectUrls: string | null;
 
   @OneToMany((type) => Interview, (entity) => entity.interviewStudent)
-  interviewStudent: User[];
+  interviewStudent: Interview[];
 
   @OneToMany((type) => Interview, (entity) => entity.headHunter)
-  headHunter: User[];
+  headHunter: Interview[];
 }

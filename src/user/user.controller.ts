@@ -16,10 +16,15 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { User } from './user.entity';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ForgetPassword } from './dto/forget-password.dto';
+import { MailService } from '../mail/mail.service';
 
 @Controller('user')
 export class UserController {
-  constructor(@Inject(UserService) private userService: UserService) {}
+  constructor(
+    @Inject(UserService) private userService: UserService,
+    @Inject(MailService) private mailService: MailService,
+  ) {}
 
   @Get('/check/:id/:token')
   async register(
@@ -36,6 +41,14 @@ export class UserController {
     @Res() res: Response,
   ): Promise<any> {
     return this.userService.setPassword(req, res);
+  }
+
+  @Post('/forgetpassword')
+  async forgetPassword(
+    @Body() req: ForgetPassword,
+    @Res() res: Response,
+  ): Promise<any> {
+    return this.userService.forgetPassword(req, res);
   }
 
   @UseGuards(AuthGuard('jwt'))
