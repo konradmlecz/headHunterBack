@@ -9,6 +9,7 @@ import { ForgetPassword } from './dto/forget-password.dto';
 import { MailService } from '../mail/mail.service';
 import { forgetPasswordEmailTemplate } from '../templates/email/forget';
 import { IsNull, Not } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -71,9 +72,11 @@ export class UserService {
       const user = await User.findOneOrFail({
         where: {
           email,
-          currentTokenId: Not(IsNull()),
+          pwd: Not(IsNull()),
         },
       });
+      user.currentTokenId = uuid();
+      await user.save();
 
       await this.mailService.sendMail(
         user.email,
