@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 import { SetPassword } from './dto/set-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { changePasswordResponse } from '../types/user';
+import { ForgetPassword } from './dto/forget-password.dto';
+import { MailService } from '../mail/mail.service';
+import { forgetPasswordEmailTemplate } from '../templates/email/forget';
+import { IsNull, Not } from 'typeorm';
 
 @Injectable()
 export class UserService {
+  constructor(@Inject(MailService) private mailService: MailService) {}
+
   async check(id: string, token: string, res: Response) {
     try {
       await User.findOneOrFail({
@@ -56,6 +62,32 @@ export class UserService {
         isSuccess: false,
         message:
           'Setting password is impossible at this moment, contact with Administrator',
+      });
+    }
+  }
+
+  async forgetPassword({ email }: ForgetPassword, res: Response) {
+    try {
+      const user = await User.findOneOrFail({
+        where: {
+          email,
+          currentTokenId: Not(IsNull()),
+        },
+      });
+
+      await this.mailService.sendMail(
+        user.email,
+        `Head Hunter |MEGAK| - Zmiana hasła!`,
+        forgetPasswordEmailTemplate(user.id, user.currentTokenId),
+      );
+
+      res.json({
+        isSuccess: true,
+      });
+    } catch (error) {
+      res.status(401).json({
+        isSuccess: false,
+        message: 'Change password is not possible for this email address',
       });
     }
   }
